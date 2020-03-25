@@ -1,0 +1,163 @@
+<style>
+  .modal-body {
+    background: #f4f8f9;
+  }
+
+  .modal-body .collapse.row:first-child {
+    background:    white;
+    padding:       15px 20px;
+    margin-bottom: 15px;
+  }
+
+  #azure-elastic-profile-container .ea_section {
+    background: #e7eef0;
+    margin-bottom: 15px;
+  }
+
+  #azure-elastic-profile-container .param-row {
+    padding-left: 15px;
+  }
+
+  #azure-elastic-profile-container .col-2, #azure-elastic-profile-container .col-3 {
+    display: flex;
+  }
+
+  #azure-elastic-profile-container .col {
+    padding: 0 15px 0 0;
+  }
+
+  #azure-elastic-profile-container .col select {
+    width: 100%;
+  }
+
+  #azure-elastic-profile-container .col-2 .or {
+    padding: 25px 15px 15px 0;
+  }
+
+  #azure-elastic-profile-container .col-2 .col{
+    width: 50%;
+    padding: 0 15px 0 0;
+  }
+
+  #azure-elastic-profile-container .col-3 .col {
+    width: 33%;
+    padding: 0 15px 0 0;
+  }
+
+  #azure-elastic-profile-container .ea_section .ea_header {
+    padding: 0 15px;
+    background: #d1c4e9;
+    border-radius: 3px 3px 0 0;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 30px;
+    margin-bottom: 15px;
+  }
+
+  #azure-elastic-profile-container .ea_section .help-content {
+    color: #666;
+    font-size: 12px;
+    font-style: italic;
+    padding-bottom: 5px;
+    margin-top: -1rem;
+  }
+
+</style>
+
+<div id="azure-elastic-profile-container">
+  <div class="ea_section">
+    <div class="ea_header">Virtual machine</div>
+    <div class="param-row">
+      <div class="col-2">
+        <div class="col" ng-init="platform = (platform || 'LINUX')">
+          <label>Select operating system of the agent instance</label>
+          <input type="radio" ng-model="platform" value="LINUX" id="linux-os" class="ng-pristine ng-valid" name="platform">
+          <label for="linux-os">Linux</label>
+          <input type="radio" ng-model="platform" value="WINDOWS" id="windows-os" class="ng-pristine ng-valid" name="platform">
+          <label for="windows-os">Windows</label>
+        </div>
+      </div>
+      </div>
+    <div class="param-row">
+      <div class="col-2">
+        <div class="col">
+          <label ng-class="{'is-invalid-label': GOINPUTNAME[vm_image_urn].$error.server}" >Image URN (Publisher:Offer:Sku:Version)</label>
+          <input ng-class="{'is-invalid-input': GOINPUTNAME[vm_image_urn].$error.server}" placeholder="Canonical:UbuntuServer:16.04.0-LTS:latest" type="text" ng-model="vm_image_urn" ng-required="true"/>
+          <span class="form_error form-error" ng-class="{'is-visible': GOINPUTNAME[vm_image_urn].$error.server}" ng-show="GOINPUTNAME[vm_image_urn].$error.server">{{GOINPUTNAME[vm_image_urn].$error.server}}</span>
+          <div class="help-content"><a target="_blank" href="https://docs.microsoft.com/en-us/azure/virtual-machines/windows/cli-ps-findimage#terminology">Image urn</a> to provision virtual machine.</div>
+        </div>
+        <div class="or">OR</div>
+        <div class="col">
+          <label ng-class="{'is-invalid-label': GOINPUTNAME[vm_custom_image_id].$error.server}" >Custom image id</label>
+          <input ng-class="{'is-invalid-input': GOINPUTNAME[vm_custom_image_id].$error.server}"vm_custom_image_id type="text" ng-model="vm_custom_image_id" ng-required="true"/>
+          <span class="form_error form-error" ng-class="{'is-visible': GOINPUTNAME[vm_custom_image_id].$error.server}" ng-show="GOINPUTNAME[vm_custom_image_id].$error.server">{{GOINPUTNAME[vm_custom_image_id].$error.server}}</span>
+        </div>
+      </div>
+    </div>
+    <div class="param-row">
+      <div class="col-3">
+        <div class="col">
+          <label ng-class="{'is-invalid-label': GOINPUTNAME[vm_size].$error.server}">Size<span class="asterix">*</span></label>
+          <input ng-class="{'is-invalid-input': GOINPUTNAME[vm_size].$error.server}" type="text" placeholder="Standard_D3_v2" ng-model="vm_size" ng-required="true" rows="7"/>
+          <span class="form_error form-error" ng-class="{'is-visible': GOINPUTNAME[vm_size].$error.server}" ng-show="GOINPUTNAME[vm_size].$error.server">{{GOINPUTNAME[vm_size].$error.server}}</span>
+          <div class="help-content">Size of the virtual machine from <a target="_blank" href="https://docs.microsoft.com/en-us/azure/cloud-services/cloud-services-sizes-specs"> available sizes</a>.</div>
+        </div>
+        <div class="col">
+          <label ng-class="{'is-invalid-label': GOINPUTNAME[os_disk_storage_account_type].$error.server}">OS disk storage type<span class="asterix">*</span></label>
+          <select ng-model="os_disk_storage_account_type"
+                  ng-init="os_disk_storage_account_type = (os_disk_storage_account_type || 'StandardSSD_LRS')">
+            <option value="StandardSSD_LRS">Standard SSD</option>
+            <option value="Premium_LRS">Premium SSD</option>
+            <option value="Standard_LRS">Standard HDD</option>
+          </select>
+          <span class="form_error form-error" ng-class="{'is-visible': GOINPUTNAME[os_disk_storage_account_type].$error.server}" ng-show="GOINPUTNAME[os_disk_storage_account_type].$error.server">{{GOINPUTNAME[os_disk_storage_account_type].$error.server}}</span>
+          <div class="help-content"><a href="https://docs.microsoft.com/en-us/azure/virtual-machines/{{platform.toLowerCase()}}/premium-storage" target="_blank">Premium SSD</a> is supported only on specific size-series VMs</div>
+        </div>
+        <div class="col">
+          <label ng-class="{'is-invalid-label': GOINPUTNAME[os_disk_size].$error.server}">OS disk size (in GB)</label>
+          <input ng-class="{'is-invalid-input': GOINPUTNAME[os_disk_size].$error.server}"os_disk_size type="text" ng-model="os_disk_size" />
+          <span class="form_error form-error" ng-class="{'is-visible': GOINPUTNAME[os_disk_size].$error.server}" ng-show="GOINPUTNAME[os_disk_size].$error.server">{{GOINPUTNAME[os_disk_size].$error.server}}</span>
+        </div>
+      </div>
+    </div>
+    <div class="param-row">
+      <div class="col">
+        <label>Custom Script<span class="asterix"></span></label>
+        <textarea rows="10" cols="50" ng-model="custom_script" ng-required="false"/>
+        <span ng-show="platform == 'LINUX'">
+          <div class="help-content">This shell script will be executed once after startup of the virtual machine. Read more about
+            <a target="_blank" href="https://docs.microsoft.com/en-us/rest/api/compute/virtual%20machines%20run%20commands/runcommand">running commands on virtual machines.</a>
+            <b>Prepend the script with <i>set -e</i> to abort script execution on error.</b>
+          </div>
+        </span>
+        <span ng-show="platform == 'WINDOWS'">
+          <div class="help-content">This powershell script will be executed once after startup of the virtual machine. Read more about
+            <a target="_blank" href="https://docs.microsoft.com/en-us/rest/api/compute/virtual%20machines%20run%20commands/runcommand">running commands on virtual machines.</a>
+            <b>Prepend the script with <i>$ErrorActionPreference = "Stop"</i> to abort script execution on error.</b>
+          </div>
+        </span>
+      </div>
+    </div>
+    <div class="param-row">
+      <div class="col-2">
+        <div class="col">
+          <label>Agent idle timeout (in minutes)</label>
+          <input ng-class="{'is-invalid-input': GOINPUTNAME[idle_timeout].$error.server}" type="text" ng-model="idle_timeout"/>
+          <span class="form_error" ng-class="{'is-visible': GOINPUTNAME[idle_timeout].$error.server}" ng-show="GOINPUTNAME[idle_timeout].$error.server">{{GOINPUTNAME[idle_timeout].$error.server}}</span>
+          <div class="help-content">
+            Azure instance will be kept idle for this period before termination, after job completion.
+            This value overrides idle timeout setting in Plugin Settings.
+          </div>
+        </div>
+        <div class="col">
+          <label>Subnet name</label>
+          <input ng-class="{'is-invalid-input': GOINPUTNAME[subnet_name].$error.server}" type="text" ng-model="subnet_name"/>
+          <span class="form_error" ng-class="{'is-visible': GOINPUTNAME[subnet_name].$error.server}" ng-show="GOINPUTNAME[subnet_name].$error.server">{{GOINPUTNAME[subnet_name].$error.server}}</span>
+          <div class="help-content">
+            Subnet name from the configured subnets in plugin settings to provision the VM in. If not specified a subnet will be selected from configured values in plugin settings.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

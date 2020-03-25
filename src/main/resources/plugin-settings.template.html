@@ -1,0 +1,229 @@
+<style>
+  .modal-body {
+    background: #f4f8f9;
+  }
+
+  #azure-plugin-settings-container .ea_section {
+    background: white;
+    margin-bottom: 15px;
+  }
+
+  #azure-plugin-settings-container .param-row {
+    padding-left: 15px;
+  }
+
+  #azure-plugin-settings-container .col-2, #azure-plugin-settings-container .col-3 {
+    display: flex;
+  }
+
+  #azure-plugin-settings-container .col {
+    padding: 0 15px 0 0;
+  }
+
+  #azure-plugin-settings-container .col-2 .or {
+    padding: 25px 15px 15px 0;
+  }
+
+  #azure-plugin-settings-container .col-2 .col{
+    width: 50%;
+    padding: 0 15px 0 0;
+  }
+
+  #azure-plugin-settings-container .col-3 .col {
+    width: 33%;
+    padding: 0 15px 0 0;
+  }
+
+  #azure-plugin-settings-container .ea_section .ea_header {
+    padding: 0 15px;
+    background: #d1c4e9;
+    border-radius: 3px 3px 0 0;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 30px;
+    margin-bottom: 15px;
+  }
+
+  #azure-plugin-settings-container .ea_section .help-content {
+    color: #666;
+    font-size: 12px;
+    font-style: italic;
+    padding-bottom: 5px;
+    margin-top: -1rem;
+  }
+
+  #azure-plugin-settings-container .ea_section textarea {
+    font-size: 0.8em;
+    padding: 5px;
+  }
+
+  #azure-plugin-settings-container .ea_section .ea_subsection .header {
+    font-weight: 600;
+    padding: 0 5px 5px 15px;
+  }
+
+  #azure-plugin-settings-container .ea_section .col.text-area .form_error {
+    margin-top: 2px;
+    margin-bottom: 2px;
+  }
+
+  #azure-plugin-settings-container .ea_section .col.text-area .help-content {
+    margin-top: 2px;
+  }
+</style>
+
+<div id="azure-plugin-settings-container">
+  <div class="ea_section">
+    <div class="ea_header">Go Server configuration</div>
+    <div class="param-row">
+      <div class="col">
+        <label>Go server URL:<span class='asterix'>*</span></label>
+        <input ng-class="{'is-invalid-input': GOINPUTNAME[go_server_url].$error.server}" type="text" ng-model="go_server_url" ng-required="true" />
+        <span class="form_error" ng-class="{'is-visible': GOINPUTNAME[go_server_url].$error.server}" ng-show="GOINPUTNAME[go_server_url].$error.server">{{GOINPUTNAME[go_server_url].$error.server}}</span>
+        <div class="help-content">
+          This is used by Azure instance to register with GoCD server. Server hostname must resolve in your instance. Don't use <code>localhost</code> or <code>127.0.0.1</code>. The url must be https and must end with /go. Example: https://build.gocd.org/go.
+        </div>
+      </div>
+    </div>
+    <div class="param-row">
+      <div class="col">
+        <label>Agent auto-register timeout (in minutes)<span class='asterix'>*</span></label>
+        <input ng-class="{'is-invalid-input': GOINPUTNAME[auto_register_timeout].$error.server}" placeholder="10" type="text" ng-model="auto_register_timeout" ng-required="true" />
+        <span class="form_error" ng-class="{'is-visible': GOINPUTNAME[auto_register_timeout].$error.server}" ng-show="GOINPUTNAME[auto_register_timeout].$error.server">{{GOINPUTNAME[auto_register_timeout].$error.server}}</span>
+        <div class="help-content">
+          If an elastic agent created by the plugin does not register with the server within the specified timeout period, the plugin will assume that the elastic agent failed to start and will be terminated.
+        </div>
+      </div>
+    </div>
+    <div class="param-row">
+      <div class="col">
+        <label>Agent idle timeout (in minutes)</label>
+        <input ng-class="{'is-invalid-input': GOINPUTNAME[idle_timeout].$error.server}" placeholder="0" type="text" ng-model="idle_timeout"/>
+        <span class="form_error" ng-class="{'is-visible': GOINPUTNAME[idle_timeout].$error.server}" ng-show="GOINPUTNAME[idle_timeout].$error.server">{{GOINPUTNAME[idle_timeout].$error.server}}</span>
+        <div class="help-content">
+          Azure instance will be kept idle for this period before termination, after job completion.
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ea_section">
+    <div class="ea_header">Azure configuration</div>
+    <div class="param-row">
+      <div class="col-2">
+        <div class="col">
+          <label>Resource group name<span class='asterix'>*</span></label>
+          <input ng-class="{'is-invalid-input': GOINPUTNAME[resource_group].$error.server}" type="text" ng-model="resource_group" ng-required="true" />
+          <span class="form_error" ng-class="{'is-visible': GOINPUTNAME[resource_group].$error.server}" ng-show="GOINPUTNAME[resource_group].$error.server">{{GOINPUTNAME[resource_group].$error.server}}</span>
+          <div class="help-content">
+            Name of an existing <a target="_blank" href="https://docs.microsoft.com/en-us/azure/architecture/cloud-adoption/getting-started/azure-resource-access">resource group</a> in your Azure account where the agent virtual machines will be created.
+          </div>
+        </div>
+        <div class="col">
+          <label>Region name<span class='asterix'>*</span></label>
+          <input ng-class="{'is-invalid-input': GOINPUTNAME[region_name].$error.server}" placeholder="West US" type="text" ng-model="region_name" ng-required="true" />
+          <span class="form_error" ng-class="{'is-visible': GOINPUTNAME[region_name].$error.server}" ng-show="GOINPUTNAME[region_name].$error.server">{{GOINPUTNAME[region_name].$error.server}}</span>
+          <div class="help-content">
+            <a target="_blank" href="https://azure.microsoft.com/en-in/global-infrastructure/locations/">Azure Region</a> where agent virtual machines will be created.
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="param-row">
+      <div class="col-2">
+        <div class="col">
+          <label>Virtual network id<span class='asterix'>*</span></label>
+          <input ng-class="{'is-invalid-input': GOINPUTNAME[network_id].$error.server}" type="text" ng-model="network_id" ng-required="true" />
+          <span class="form_error" ng-class="{'is-visible': GOINPUTNAME[network_id].$error.server}" ng-show="GOINPUTNAME[network_id].$error.server">{{GOINPUTNAME[network_id].$error.server}}</span>
+          <div class="help-content">
+            <a target="_blank" href="https://docs.microsoft.com/en-us/azure/virtual-network/quick-create-portal">Virtual network</a> Id where agent virtual machines will be created.
+          </div>
+        </div>
+        <div class="col">
+          <label>Subnet name(s)<span class='asterix'>*</span></label>
+          <input ng-class="{'is-invalid-input': GOINPUTNAME[subnet].$error.server}" type="text" ng-model="subnet" ng-required="true" />
+          <span class="form_error" ng-class="{'is-visible': GOINPUTNAME[subnet].$error.server}" ng-show="GOINPUTNAME[subnet].$error.server">{{GOINPUTNAME[subnet].$error.server}}</span>
+          <div class="help-content">
+            <a target="_blank" href="https://docs.microsoft.com/en-us/azure/virtual-network/virtual-network-manage-subnet">Subnet name(s)</a> where agent virtual machines will be created. Use a comma separated value for multiple subnets.
+          </div>
+        </div>
+        <div class="col">
+          <label>Network Security Group Id</label>
+          <input ng-class="{'is-invalid-input': GOINPUTNAME[network_security_group_id].$error.server}" type="text" ng-model="network_security_group_id" ng-required="false" />
+          <span class="form_error" ng-class="{'is-visible': GOINPUTNAME[network_security_group_id].$error.server}" ng-show="GOINPUTNAME[network_security_group_id].$error.server">{{GOINPUTNAME[network_security_group_id].$error.server}}</span>
+          <div class="help-content">
+            Resource id of the NSG which will be assigned to the Virtual Machines.
+            Read more about managing <a target="_blank" href="https://docs.microsoft.com/en-us/azure/virtual-network/manage-network-security-group">NetworkSecurityGroup.</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ea_section">
+    <div class="ea_header">Credentials</div>
+    <div class="param-row">
+      <div class="col-3">
+        <div class="col">
+          <label>Client Id<span class='asterix'>*</span></label>
+          <input ng-class="{'is-invalid-input': GOINPUTNAME[client_id].$error.server}" type="text" ng-model="client_id" ng-required="true" />
+          <span class="form_error" ng-class="{'is-visible': GOINPUTNAME[client_id].$error.server}" ng-show="GOINPUTNAME[client_id].$error.server">{{GOINPUTNAME[client_id].$error.server}}</span>
+        </div>
+        <div class="col">
+          <label>Secret<span class='asterix'>*</span></label>
+          <input  type="password" ng-class="{'is-invalid-input': GOINPUTNAME[client_id].$error.server}" ng-model="secret" ng-required="true" />
+          <span class="form_error" ng-class="{'is-visible': GOINPUTNAME[secret].$error.server}" ng-show="GOINPUTNAME[secret].$error.server">{{GOINPUTNAME[secret].$error.server}}</span>
+        </div>
+        <div class="col">
+          <label>Domain/Tenant Id<span class='asterix'>*</span></label>
+          <input ng-class="{'is-invalid-input': GOINPUTNAME[domain].$error.server}" type="text" ng-model="domain" ng-required="true"/>
+          <span class="form_error" ng-class="{'is-visible': GOINPUTNAME[domain].$error.server}" ng-show="GOINPUTNAME[domain].$error.server">{{GOINPUTNAME[domain].$error.server}}</span>
+        </div>
+      </div>
+      <div class="help-content">
+        You can create a service Principal for sdk-auth for your Azure subscription following these <a target="_blank" href="https://docs.microsoft.com/en-us/cli/azure/ad/sp?view=azure-cli-latest#az-ad-sp-create-for-rbac">instructions</a>.
+      </div>
+    </div>
+  </div>
+  <div class="ea_section">
+    <div class="ea_header">Platform settings</div>
+    <div class="ea_subsection">
+      <div class="header">Linux</div>
+      <div class="param-row">
+        <div class="col">
+          <label>User name<span class='asterix'>*</span></label>
+          <input ng-class="{'is-invalid-input': GOINPUTNAME[linux_user_name].$error.server}" type="text" ng-model="linux_user_name" ng-required="true" />
+          <span class="form_error" ng-class="{'is-visible': GOINPUTNAME[linux_user_name].$error.server}" ng-show="GOINPUTNAME[linux_user_name].$error.server">{{GOINPUTNAME[linux_user_name].$error.server}}</span>
+        </div>
+      </div>
+      <div class="param-row">
+        <div class="col text-area">
+          <label>SSH public key<span class='asterix'>*</span></label>
+          <textarea rows="6" cols="50" ng-model="ssh_key" ng-required="true"/>
+          <span class="form_error" ng-class="{'is-visible': GOINPUTNAME[ssh_key].$error.server}" ng-show="GOINPUTNAME[ssh_key].$error.server">{{GOINPUTNAME[ssh_key].$error.server}}</span>
+          <div class="help-content">
+            Use these credentials to log into Linux agent virtual machines.
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="ea_subsection">
+      <div class="header">Windows</div>
+      <div class="param-row">
+        <div class="col">
+          <label>User name<span class='asterix'>*</span></label>
+          <input ng-class="{'is-invalid-input': GOINPUTNAME[windows_user_name].$error.server}" type="text" ng-model="windows_user_name" ng-required="true" />
+          <span class="form_error" ng-class="{'is-visible': GOINPUTNAME[windows_user_name].$error.server}" ng-show="GOINPUTNAME[windows_user_name].$error.server">{{GOINPUTNAME[windows_user_name].$error.server}}</span>
+        </div>
+      </div>
+      <div class="param-row">
+        <div class="col">
+          <label>Password<span class='asterix'>*</span></label>
+          <input type="password" ng-model="windows_password" ng-required="true"/>
+          <span class="form_error" ng-class="{'is-visible': GOINPUTNAME[windows_password].$error.server}" ng-show="GOINPUTNAME[windows_password].$error.server">{{GOINPUTNAME[windows_password].$error.server}}</span>
+          <div class="help-content">
+            Use these credentials to log into Windows agent virtual machines.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

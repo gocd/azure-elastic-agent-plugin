@@ -143,11 +143,11 @@ and restart the server.
 
 ## Configuring the Azure Elastic Agent Plugin
 
-1. Configure the GoCD Azure Elastic Agent [Plugin Settings](./PLUGIN_SETTINGS.md): The plugin settings are used to provide global level configurations for the plugin. Configurations such as Azure credentials, Azure settings like Virtual Network, region, Go Server configuration are provided in plugin settings.
+1. Configure the GoCD Azure Elastic Agent [Plugin Settings](PLUGIN_SETTINGS.md): The plugin settings are used to provide global level configurations for the plugin. Configurations such as Azure credentials, Azure settings like Virtual Network, region, Go Server configuration are provided in plugin settings.
 
     ![Alt text](readme-screenshots/azure-plugin-settings.png?raw=true "azure-plugin-settings")
 
-2. Configure an [Elastic Profile](./ELASTIC_PROFILE_CONFIGURATION.md) for GoCD Azure Elastic Agent Plugin: The Elastic Agent Profile is used to define the configuration of the Azure instance. The profile is used to configure the platform, VM image, size and the custom scripts to be run on the instance.
+2. Configure an [Elastic Profile](ELASTIC_PROFILE_CONFIGURATION.md) for GoCD Azure Elastic Agent Plugin: The Elastic Agent Profile is used to define the configuration of the Azure instance. The profile is used to configure the platform, VM image, size and the custom scripts to be run on the instance.
 
     ![Alt text](readme-screenshots/azure-elastic-profile.png?raw=true "azure-elastic-profile")
 

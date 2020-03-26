@@ -44,10 +44,11 @@ public class AzureInstanceManager {
     VmConfig config = buildVmConfig(request, settings, serverInfo);
     VirtualMachine virtualMachine = client.createVM(config);
     LOG.info("[Instance Manager] Created instance: {}", virtualMachine.name());
-    client.installGoAgent(config);
+    // client.installGoAgent(config);
     executeCustomScript(client, config);
-    client.startAgent(config);
-    LOG.info("[Instance Manager] Started go-agent on instance: {}", virtualMachine.name());
+    LOG.info("[Instance Manager] Executed custom script: {}", virtualMachine.name());
+    // client.startAgent(config);
+    // LOG.info("[Instance Manager] Started go-agent on instance: {}", virtualMachine.name());
     return mapper.map(virtualMachine);
   }
 

@@ -30,7 +30,7 @@ class LinuxCustomScriptExtensionTest {
 
   @Test
   void shouldCreateAzureCustomExtensionScriptToInstallGoAgent() {
-    String goAgentVersion = "19.4.0";
+    String goAgentVersion = "19.2.0";
     LinuxCustomScriptExtension extension = new LinuxCustomScriptExtension(goAgentVersion,
         "http://go-server/go",
         "auto-register-key",

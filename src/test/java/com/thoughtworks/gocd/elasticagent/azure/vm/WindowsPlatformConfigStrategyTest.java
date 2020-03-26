@@ -60,23 +60,23 @@ class WindowsPlatformConfigStrategyTest extends BaseTest {
   void shouldAddWindowsOSProperties() {
     PluginSettings pluginSettings = createPluginSettings();
     VmConfig vmConfig = new VmConfig.Builder()
-        .setRequestParams(new CreateAgentRequest("",
-            new ElasticProfile("Size",
-                "",
-                "imageId",
-                "",
-                WINDOWS, "Standard_LRS", "", "50", ""),
-            "",
-            new JobIdentifier()))
-        .setSettingsParams(pluginSettings).build();
+	.setRequestParams(new CreateAgentRequest("",
+	    new ElasticProfile("Size",
+		"",
+		"imageId",
+		"",
+		WINDOWS, "Standard_LRS", "", "50", ""),
+	    "",
+	    new JobIdentifier()))
+	.setSettingsParams(pluginSettings).build();
     VirtualMachine.DefinitionStages.WithOS withOS = Mockito.mock(VirtualMachine.DefinitionStages.WithOS.class, Mockito.RETURNS_DEEP_STUBS);
     VirtualMachine.DefinitionStages.WithCreate mockReturn = mock(VirtualMachine.DefinitionStages.WithCreate.class);
     when(withOS.withWindowsCustomImage("imageId")
-        .withAdminUsername(pluginSettings.getWindowsUserName())
-        .withAdminPassword(pluginSettings.getWindowsPassword())
-        .withOSDiskStorageAccountType(StorageAccountTypes.STANDARD_LRS)
-        .withSize("Size"))
-        .thenReturn(mockReturn);
+	.withAdminUsername(pluginSettings.getWindowsUserName())
+	.withAdminPassword(pluginSettings.getWindowsPassword())
+	.withOSDiskStorageAccountType(StorageAccountTypes.STANDARD_LRS)
+	.withSize("Size"))
+	.thenReturn(mockReturn);
 
     VirtualMachine.DefinitionStages.WithCreate withCreate = windowsPlatformConfigStrategy.addOS(withOS, vmConfig);
 
@@ -173,7 +173,7 @@ class WindowsPlatformConfigStrategyTest extends BaseTest {
       put("agent_id", "agentId");
       put("username", "username");
       put("password", "password");
-      put("go_agent_installer_url", "https://download.gocd.org/binaries/19.4.0-9155/win/go-agent-19.4.0-9155-jre-64bit-setup.exe");
+      put("go_agent_installer_url", "https://download.gocd.org/binaries/19.2.0-8641/win/go-agent-19.2.0-8641-jre-64bit-setup.exe");
     }};
     assertEquals(expectedParams, actualParams);
     verify(mockVirtualMachines).runPowerShellScript("groupName", "vmName", Collections.singletonList("install script"), Collections.emptyList());

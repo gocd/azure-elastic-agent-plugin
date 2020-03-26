@@ -31,8 +31,8 @@ import java.util.UUID;
 
 public class Util {
 
-  public static final String PLUGIN_VERSION_KEY = "pluginVersion";
-  public static final String PLUGIN_ID_KEY = "pluginId";
+  public static final String PLUGIN_VERSION_KEY = "version";
+  public static final String PLUGIN_ID_KEY = "id";
   private static Random random = new Random();
 
   public static String readResource(String resourceFile) {

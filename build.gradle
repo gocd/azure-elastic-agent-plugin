@@ -74,22 +74,22 @@ dependencies {
   compileOnly group: 'org.projectlombok', name: 'lombok', version: project.versions.lombok
   annotationProcessor group: 'org.projectlombok', name: 'lombok', version: project.versions.lombok
 
-  compile group: 'cd.go.plugin', name: 'go-plugin-api', version: project.versions.goPluginApi
-  compile group: 'com.google.code.gson', name: 'gson', version: project.versions.gson
-  compile group: 'com.google.guava', name: 'guava', version: project.versions.guava
-  compile group: 'org.apache.commons', name: 'commons-lang3', version: project.versions.lang3
-  compile group: 'joda-time', name: 'joda-time', version: project.versions.joda
-  compile group: 'com.microsoft.azure', name: 'azure', version: project.versions.azure
-  compile group: 'org.freemarker', name: 'freemarker', version: project.versions.freemarker
+  implementation group: 'cd.go.plugin', name: 'go-plugin-api', version: project.versions.goPluginApi
+  implementation group: 'com.google.code.gson', name: 'gson', version: project.versions.gson
+  implementation group: 'com.google.guava', name: 'guava', version: project.versions.guava
+  implementation group: 'org.apache.commons', name: 'commons-lang3', version: project.versions.lang3
+  implementation group: 'joda-time', name: 'joda-time', version: project.versions.joda
+  implementation group: 'com.microsoft.azure', name: 'azure', version: project.versions.azure
+  implementation group: 'org.freemarker', name: 'freemarker', version: project.versions.freemarker
 
-  testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: project.versions.junitJupiter
-  testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: project.versions.junitJupiter
-  testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: project.versions.junitJupiter
-  testCompile group: 'org.hamcrest', name: 'hamcrest-library', version: project.versions.hamcrestLib
-  testCompile group: 'org.mockito', name: 'mockito-core', version: project.versions.mockito
-  testCompile group: 'org.mockito', name: 'mockito-junit-jupiter', version: project.versions.mockito
+  testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: project.versions.junitJupiter
+  testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: project.versions.junitJupiter
+  testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params', version: project.versions.junitJupiter
+  testImplementation group: 'org.hamcrest', name: 'hamcrest-library', version: project.versions.hamcrestLib
+  testImplementation group: 'org.mockito', name: 'mockito-core', version: project.versions.mockito
+  testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter', version: project.versions.mockito
 
-  testCompile group: 'org.skyscreamer', name: 'jsonassert', version: project.versions.jsonAssert
+  testImplementation group: 'org.skyscreamer', name: 'jsonassert', version: project.versions.jsonAssert
 }
 
 test {
@@ -97,7 +97,7 @@ test {
 }
 
 jar {
-  from(configurations.compile) {
+  from(configurations.compileClasspath) {
     into "lib/"
   }
 }

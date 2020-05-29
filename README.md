@@ -12,11 +12,16 @@ Table of Contents
 
   * [Building the code base](#building-the-code-base)
   * [Install and configure the plugin](/docs/INSTALL.md)
+    * [Prerequisites](/docs/INSTALL.md#prerequisites)
+    * [Installation](/docs/INSTALL.md#installation)
+    * [Configuration](/docs/INSTALL.md#configuring-the-azure-elastic-agent-plugin)
+        * [Configure Plugin Settings](/docs/PLUGIN_SETTINGS.md)
+        * [Configure Elastic Profile](/docs/ELASTIC_PROFILE_CONFIGURATION.md)
   * [Troubleshooting](/docs/TROUBLESHOOT.md)
 
 ## Building the code base
 
-To build the jar, run `./gradlew clean test assemble`
+To build the jar, run `./gradlew clean check assemble`
 
 ## License
 

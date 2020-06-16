@@ -89,6 +89,15 @@ class NetworkDecoratorTest {
 
   @Test
   void shouldSkipNetworkSecurityGroupIfNotConfigured() {
+    assertNSGIsSkippedWhenIDProvidedIs(null);
+  }
+
+  @Test
+  void shouldSkipNetworkSecurityGroupIfEmpty() {
+    assertNSGIsSkippedWhenIDProvidedIs("");
+  }
+
+  private void assertNSGIsSkippedWhenIDProvidedIs(String nsgID) {
     VmConfig vmConfig = mock(VmConfig.class);
     WithNetwork withNetwork = mock(WithNetwork.class, RETURNS_DEEP_STUBS);
     WithOS expectedWithOS = mock(WithOS.class);
@@ -102,17 +111,18 @@ class NetworkDecoratorTest {
     when(vmConfig.getSubnet()).thenReturn("subnet-1");
     when(vmConfig.getNetworkId()).thenReturn("network-123");
     when(vmConfig.getNetworkInterfaceName()).thenReturn("nic-vm-123");
+    when(vmConfig.getNetworkSecurityGroupId()).thenReturn(nsgID);
 
     when(mockAzure.networks().getById("network-123")).thenReturn(existingNetwork);
 
     when(mockAzure.networkInterfaces().define("nic-vm-123")).thenReturn(mockDefinition);
     when(mockDefinition.withRegion(Region.fromName("azure-region-123"))).thenReturn(mockWithGroup);
     when(mockWithGroup.withExistingResourceGroup("resource-group-123")
-        .withExistingPrimaryNetwork(existingNetwork)
-        .withSubnet("subnet-1")
-        .withPrimaryPrivateIPAddressDynamic()
-        .create())
-        .thenReturn(networkInterface);
+            .withExistingPrimaryNetwork(existingNetwork)
+            .withSubnet("subnet-1")
+            .withPrimaryPrivateIPAddressDynamic()
+            .create())
+            .thenReturn(networkInterface);
     when(withNetwork.withExistingPrimaryNetworkInterface(networkInterface)).thenReturn(expectedWithOS);
 
     WithOS withOS = networkDecorator.add(withNetwork, vmConfig);

@@ -33,7 +33,7 @@ public class NetworkDecorator {
 
   public WithOS add(WithNetwork withNetwork, VmConfig vmConfig) {
     String nsgId = vmConfig.getNetworkSecurityGroupId();
-    NetworkSecurityGroup nsg = (nsgId != null) ?
+    NetworkSecurityGroup nsg = (nsgId != null && !nsgId.isEmpty()) ?
         azure.networkSecurityGroups().getById(nsgId)
         : null;
 

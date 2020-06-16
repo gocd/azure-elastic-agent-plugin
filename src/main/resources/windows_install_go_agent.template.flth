@@ -54,4 +54,5 @@ agent.auto.register.environments=$environment`r`n
 agent.auto.register.elasticAgent.pluginId=$plugin_id`r`n
 agent.auto.register.elasticAgent.agentId=$agent_id";
 
+New-Item -ItemType Directory -Force -Path "$install_dir\config"
 [System.IO.File]::WriteAllLines("$install_dir\config\autoregister.properties", $file_content)

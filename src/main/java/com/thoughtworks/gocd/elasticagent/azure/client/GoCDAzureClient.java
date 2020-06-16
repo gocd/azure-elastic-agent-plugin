@@ -255,6 +255,7 @@ public class GoCDAzureClient {
 
   public void installGoAgent(VmConfig config) throws ProvisionFailedException {
     try {
+      LOG.info("Installing GoCD agent on VM {}", config.getName());
       config.getPlatformStrategy().installGoAgent(azure.virtualMachines(), config);
     } catch (Exception e) {
       LOG.error("Failed to install go agent on vm {} due to error: {}\n{} {}", config.getName(), e.getMessage(), e.toString());
@@ -273,9 +274,10 @@ public class GoCDAzureClient {
 
   public void startAgent(VmConfig config) {
     try {
+      LOG.info("About to start GoCD agent on VM {}", config.getName());
       PlatformConfigStrategy configStrategy = config.getPlatformStrategy();
       RunCommandResult runCommandResult = configStrategy.startAgent(config.getResourceGroup(), config.getName(), azure.virtualMachines(), config.getAgentConfig());
-      printCommandResult(runCommandResult, format("Starting go-agent on VM %s:", config.getName()));
+      printCommandResult(runCommandResult, format("Logs from go-agent startup on VM %s:", config.getName()));
     } catch (Exception e) {
       LOG.error("Failed to start go-agent VM:{} failed with error: {}", config.getName(), e.getMessage());
       terminate(azure.virtualMachines().getByResourceGroup(resourceGroup, config.getName()));

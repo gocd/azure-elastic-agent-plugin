@@ -24,14 +24,18 @@ import com.thoughtworks.gocd.elasticagent.azure.PluginSettings;
 
 import java.io.IOException;
 
-//:TODO Add unit test
 public class GoCDAzureClientFactory {
 
   public GoCDAzureClient initialize(PluginSettings settings) throws IOException {
-    return initialize(settings.getClientId(), settings.getDomain(), settings.getSecret(), settings.getResourceGroup());
+    return initialize(settings.getClientId(), settings.getDomain(), settings.getSecret(), settings.getResourceGroup(), settings.getNetworkId());
   }
 
-  public GoCDAzureClient initialize(String clientId, String domain, String secret, String resourceGroup) throws IOException {
+  public GoCDAzureClient initialize(String clientId, String domain, String secret, String resourceGroup, String networkID) throws IOException {
+    String subscriptionID = networkID.replaceAll("^/subscriptions/([0-9a-f-]+)/.*", "$1");
+    return createClient(clientId, domain, secret, resourceGroup, subscriptionID);
+  }
+
+  protected GoCDAzureClient createClient(String clientId, String domain, String secret, String resourceGroup, String subscriptionID) {
     ApplicationTokenCredentials credentials = new ApplicationTokenCredentials(clientId,
         domain,
         secret,
@@ -40,7 +44,7 @@ public class GoCDAzureClientFactory {
     Azure azure = Azure.configure()
         .withLogLevel(LogLevel.BASIC)
         .authenticate(credentials)
-        .withDefaultSubscription();
+        .withSubscription(subscriptionID);
     return new GoCDAzureClient(azure, resourceGroup, new NetworkDecorator(azure));
   }
 }

@@ -165,7 +165,7 @@ class WindowsPlatformConfigStrategyTest extends BaseTest {
     windowsPlatformConfigStrategy.installGoAgent(mockVirtualMachines, mockVmConfig);
 
     Map<String, String> actualParams = paramsCaptor.getValue();
-    Map<String, String> expectedParams = new HashMap<String, String>() {{
+    Map<String, String> expectedParams = new HashMap<>() {{
       put("go_server_url", "serverurl");
       put("autoregister_key", "autoregisterkey");
       put("environment", "environment");
@@ -173,7 +173,7 @@ class WindowsPlatformConfigStrategyTest extends BaseTest {
       put("agent_id", "agentId");
       put("username", "username");
       put("password", "password");
-      put("go_agent_installer_url", "https://download.gocd.org/binaries/19.4.0-9155/win/go-agent-19.4.0-9155-jre-64bit-setup.exe");
+      put("go_agent_installer_url", "https://download.gocd.org/binaries/20.5.0-11820/win/go-agent-20.5.0-11820-jre-64bit-setup.exe");
     }};
     assertEquals(expectedParams, actualParams);
     verify(mockVirtualMachines).runPowerShellScript("groupName", "vmName", Collections.singletonList("install script"), Collections.emptyList());

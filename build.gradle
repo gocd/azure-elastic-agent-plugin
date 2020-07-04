@@ -35,7 +35,7 @@ project.ext.versions = [
 gocdPlugin {
   id = 'com.thoughtworks.gocd.elastic-agent.azure'
   pluginVersion = '1.0.0'
-  goCdVersion = '19.4.0'
+  goCdVersion = '20.5.0'
   name = 'GoCD Elastic Agent Plugin for Azure'
   description = 'GoCD Elastic Agent Plugin for Azure allows efficient usage of Azure instances'
   vendorName = 'ThoughtWorks, Inc.'

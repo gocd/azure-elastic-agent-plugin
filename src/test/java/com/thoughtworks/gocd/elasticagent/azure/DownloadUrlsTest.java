@@ -24,12 +24,12 @@ class DownloadUrlsTest {
 
   @Test
   void testLinuxGoAgentDownloadUrlShouldFetchDefaultURLForVersionNotPublished() {
-    assertEquals("https://download.gocd.org/binaries/19.4.0-9155/generic/go-agent-19.4.0-9155.zip", DownloadUrls.linuxGoAgent("not valid"));
+    assertEquals("https://download.gocd.org/binaries/20.5.0-11820/generic/go-agent-20.5.0-11820.zip", DownloadUrls.linuxGoAgent("not valid"));
   }
 
   @Test
   void testWindowsGoAgentDownloadUrlShouldFetchDefaultURLForVersionNotPublished() {
-    assertEquals("https://download.gocd.org/binaries/19.4.0-9155/win/go-agent-19.4.0-9155-jre-64bit-setup.exe", DownloadUrls.windowsGoAgent("19.xyz"));
+    assertEquals("https://download.gocd.org/binaries/20.5.0-11820/win/go-agent-20.5.0-11820-jre-64bit-setup.exe", DownloadUrls.windowsGoAgent("19.xyz"));
   }
 
   @Test

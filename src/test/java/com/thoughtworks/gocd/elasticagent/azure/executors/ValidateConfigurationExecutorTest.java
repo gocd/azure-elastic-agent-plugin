@@ -122,7 +122,7 @@ class ValidateConfigurationExecutorTest {
     Validation validation1 = mock(Validation.class);
     Validation validation2 = mock(Validation.class);
     validateConfigurationExecutor = new ValidateConfigurationExecutor(settings, clientFactory, Arrays.asList(validation1, validation2));
-    when(clientFactory.initialize(any(), any(), any(), any())).thenReturn(mockClient);
+    when(clientFactory.initialize(any(), any(), any(), any(), any())).thenReturn(mockClient);
     when(validation2.run(settings, mockClient)).thenReturn(Collections.singletonMap("key", "error message"));
 
     GoPluginApiResponse response = validateConfigurationExecutor.execute();
@@ -135,7 +135,7 @@ class ValidateConfigurationExecutorTest {
 
   @Test
   void shouldReturnAuthenticationErrorsWhenAzureCredentialsAreInvalid() throws Exception {
-    when(clientFactory.initialize(any(), any(), any(), any())).thenThrow(RuntimeException.class);
+    when(clientFactory.initialize(any(), any(), any(), any(), any())).thenThrow(RuntimeException.class);
     GoPluginApiResponse response = new ValidateConfigurationExecutor(Collections.emptyMap(), clientFactory, Collections.emptyList()).execute();
 
     assertEquals(200, response.responseCode());

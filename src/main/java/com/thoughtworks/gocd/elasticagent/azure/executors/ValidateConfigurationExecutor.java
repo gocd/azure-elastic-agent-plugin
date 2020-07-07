@@ -34,34 +34,36 @@ import static com.thoughtworks.gocd.elasticagent.azure.executors.GetPluginConfig
 
 public class ValidateConfigurationExecutor implements RequestExecutor {
 
-  private final Map<String, String> settings;
-  private final List<Validation> validations;
-  private GoCDAzureClientFactory goCDAzureClientFactory;
+    private final Map<String, String> settings;
+    private final List<Validation> validations;
+    private GoCDAzureClientFactory goCDAzureClientFactory;
 
-  public ValidateConfigurationExecutor(Map<String, String> settings, GoCDAzureClientFactory goCDAzureClientFactory, List<Validation> validations) {
-    this.settings = settings;
-    this.goCDAzureClientFactory = goCDAzureClientFactory;
-    this.validations = validations;
-  }
-
-  public GoPluginApiResponse execute() {
-    ValidationResult validationResult = new ValidationResult();
-    try {
-      GoCDAzureClient client = getGoCDAzureClient(settings);
-      validations.forEach(validation -> validationResult.addErrors(validation.run(settings, client)));
-    } catch (IOException | RuntimeException ex) {
-      LOG.debug("Azure AuthenticationError ", ex);
-      validationResult.addError(CLIENT_ID.key(), AZURE_AUTHENTICATION_ERROR);
-      validationResult.addError(SECRET.key(), AZURE_AUTHENTICATION_ERROR);
-      validationResult.addError(DOMAIN.key(), AZURE_AUTHENTICATION_ERROR);
+    public ValidateConfigurationExecutor(Map<String, String> settings, GoCDAzureClientFactory goCDAzureClientFactory, List<Validation> validations) {
+        this.settings = settings;
+        this.goCDAzureClientFactory = goCDAzureClientFactory;
+        this.validations = validations;
     }
-    return DefaultGoPluginApiResponse.success(validationResult.toJson());
-  }
 
-  private GoCDAzureClient getGoCDAzureClient(Map<String, String> connectionParams) throws IOException {
-    return goCDAzureClientFactory.initialize(connectionParams.get(CLIENT_ID.key()),
-        connectionParams.get(DOMAIN.key()),
-        connectionParams.get(SECRET.key()),
-        connectionParams.get(RESOURCE_GROUP.key()));
-  }
+    public GoPluginApiResponse execute() {
+        ValidationResult validationResult = new ValidationResult();
+        try {
+            GoCDAzureClient client = getGoCDAzureClient(settings);
+            validations.forEach(validation -> validationResult.addErrors(validation.run(settings, client)));
+        } catch (IOException | RuntimeException ex) {
+            LOG.debug("Azure AuthenticationError ", ex);
+            validationResult.addError(CLIENT_ID.key(), AZURE_AUTHENTICATION_ERROR);
+            validationResult.addError(SECRET.key(), AZURE_AUTHENTICATION_ERROR);
+            validationResult.addError(DOMAIN.key(), AZURE_AUTHENTICATION_ERROR);
+        }
+        return DefaultGoPluginApiResponse.success(validationResult.toJson());
+    }
+
+    private GoCDAzureClient getGoCDAzureClient(Map<String, String> connectionParams) throws IOException {
+        return goCDAzureClientFactory.initialize(
+                connectionParams.get(CLIENT_ID.key()),
+                connectionParams.get(DOMAIN.key()),
+                connectionParams.get(SECRET.key()),
+                connectionParams.get(RESOURCE_GROUP.key()),
+                connectionParams.get(NETWORK_ID.key()));
+    }
 }

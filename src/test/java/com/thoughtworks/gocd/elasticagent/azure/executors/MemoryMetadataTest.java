@@ -21,8 +21,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.hasEntry;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class MemoryMetadataTest {
@@ -40,6 +39,6 @@ class MemoryMetadataTest {
   void shouldValidateMemoryBytesWhenRequireField() {
     Map<String, String> validate = new MemoryMetadata("Disk", true).validate(null);
     assertThat(validate.size(), is(1));
-    assertThat(validate, hasEntry("Disk", "Disk must not be blank."));
+    assertThat(validate.get("Disk"), containsString("Disk must not be blank."));
   }
 }

@@ -48,7 +48,7 @@ if ($username -and $password) {
   $Svc = Get-WmiObject win32_service -filter "name='Go Agent'"
   $Svc.Change($Null, $Null, $Null, $Null, $Null, $false, ".\$username", $password, $Null, $Null, $Null)
 }
-Write-Host "Adding autoregister.properties file"
+Write-Host "Adding UTF-8 encoded autoregister.properties file"
 $file_content = "`r`nagent.auto.register.key=$autoregister_key`r`n
 agent.auto.register.environments=$environment`r`n
 agent.auto.register.elasticAgent.pluginId=$plugin_id`r`n

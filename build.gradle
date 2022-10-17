@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 ThoughtWorks, Inc.
+ * Copyright 2020 Thoughtworks, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ gocdPlugin {
   goCdVersion = '20.9.0'
   name = 'GoCD Elastic Agent Plugin for Azure'
   description = 'GoCD Elastic Agent Plugin for Azure allows efficient usage of Azure instances'
-  vendorName = 'ThoughtWorks, Inc.'
+  vendorName = 'Thoughtworks, Inc.'
   vendorUrl = 'https://github.com/gocd-private/azure-elastic-agent-plugin'
 
   githubRepo {

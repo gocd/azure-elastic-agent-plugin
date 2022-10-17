@@ -37,7 +37,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.mockito.Mockito.*;
-import static org.mockito.MockitoAnnotations.initMocks;
+import static org.mockito.MockitoAnnotations.openMocks;
 
 class ProfileValidateRequestExecutorTest {
   @Mock
@@ -54,7 +54,7 @@ class ProfileValidateRequestExecutorTest {
 
   @BeforeEach
   void setup() throws Exception {
-    initMocks(this);
+    openMocks(this);
     when(mockPluginRequest.getPluginSettings()).thenReturn(mockPluginSettings);
     when(mockClientFactory.initialize(mockPluginSettings)).thenReturn(mockAzureClient);
     when(mockPluginSettings.getRegion()).thenReturn(Region.US_WEST);

@@ -40,7 +40,7 @@ import static com.thoughtworks.gocd.elasticagent.azure.vm.LinuxPlatformConfigStr
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
-import static org.mockito.MockitoAnnotations.initMocks;
+import static org.mockito.MockitoAnnotations.openMocks;
 
 class LinuxPlatformConfigStrategyTest extends BaseTest {
 
@@ -54,7 +54,7 @@ class LinuxPlatformConfigStrategyTest extends BaseTest {
 
   @BeforeEach
   void setUp() {
-    initMocks(this);
+    openMocks(this);
     linuxPlatformConfigStrategy = new LinuxPlatformConfigStrategy(mockCustomScriptBuilder);
   }
 

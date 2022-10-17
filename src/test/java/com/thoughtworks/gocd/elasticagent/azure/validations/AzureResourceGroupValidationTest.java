@@ -29,7 +29,7 @@ import static com.thoughtworks.gocd.elasticagent.azure.executors.GetPluginConfig
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.initMocks;
+import static org.mockito.MockitoAnnotations.openMocks;
 
 class AzureResourceGroupValidationTest {
 
@@ -39,7 +39,7 @@ class AzureResourceGroupValidationTest {
 
   @BeforeEach
   void setUp() {
-    initMocks(this);
+    openMocks(this);
     validation = new AzureResourceGroupValidation();
   }
 

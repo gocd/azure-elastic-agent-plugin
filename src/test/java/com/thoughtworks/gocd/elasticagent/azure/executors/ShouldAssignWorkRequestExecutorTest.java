@@ -31,7 +31,7 @@ import org.mockito.Mock;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.*;
-import static org.mockito.MockitoAnnotations.initMocks;
+import static org.mockito.MockitoAnnotations.openMocks;
 
 class ShouldAssignWorkRequestExecutorTest extends BaseTest {
 
@@ -57,7 +57,7 @@ class ShouldAssignWorkRequestExecutorTest extends BaseTest {
 
   @BeforeEach
   void setUp() {
-    initMocks(this);
+    openMocks(this);
     when(agentInstances.find(agentId)).thenReturn(instance);
   }
 

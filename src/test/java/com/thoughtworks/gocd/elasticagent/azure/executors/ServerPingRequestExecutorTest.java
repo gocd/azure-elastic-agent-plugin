@@ -31,7 +31,7 @@ import java.util.UUID;
 
 import static java.util.Arrays.asList;
 import static org.mockito.Mockito.*;
-import static org.mockito.MockitoAnnotations.initMocks;
+import static org.mockito.MockitoAnnotations.openMocks;
 
 class ServerPingRequestExecutorTest extends BaseTest {
 
@@ -46,7 +46,7 @@ class ServerPingRequestExecutorTest extends BaseTest {
 
   @BeforeEach
   void setUp() {
-    initMocks(this);
+    openMocks(this);
   }
 
   @Test

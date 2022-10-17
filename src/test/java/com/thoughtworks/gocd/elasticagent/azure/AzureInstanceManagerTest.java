@@ -39,7 +39,7 @@ import static com.thoughtworks.gocd.elasticagent.azure.vm.VMTags.GOCD_SERVER_ID_
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
-import static org.mockito.MockitoAnnotations.initMocks;
+import static org.mockito.MockitoAnnotations.openMocks;
 
 class AzureInstanceManagerTest extends BaseTest {
 
@@ -53,7 +53,7 @@ class AzureInstanceManagerTest extends BaseTest {
 
   @BeforeEach
   void setup() {
-    initMocks(this);
+    openMocks(this);
     azureInstanceManager = new AzureInstanceManager(mapper);
   }
 

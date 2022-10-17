@@ -36,7 +36,7 @@ import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
-import static org.mockito.MockitoAnnotations.initMocks;
+import static org.mockito.MockitoAnnotations.openMocks;
 
 class JobCompletionRequestExecutorTest {
   @Mock
@@ -51,7 +51,7 @@ class JobCompletionRequestExecutorTest {
 
   @BeforeEach
   void setUp() {
-    initMocks(this);
+    openMocks(this);
   }
 
   @Test
@@ -94,7 +94,7 @@ class JobCompletionRequestExecutorTest {
     when(mockPluginRequest.listAgents()).thenReturn(new Agents());
     GoPluginApiResponse response = executor.execute();
 
-    verifyZeroInteractions(mockAgentInstances);
+    verifyNoInteractions(mockAgentInstances);
     assertEquals(200, response.responseCode());
   }
 

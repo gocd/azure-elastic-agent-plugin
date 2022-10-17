@@ -38,7 +38,7 @@ import static java.util.Collections.singletonList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.*;
-import static org.mockito.MockitoAnnotations.initMocks;
+import static org.mockito.MockitoAnnotations.openMocks;
 
 class AzureAgentInstancesTest extends BaseTest {
 
@@ -57,7 +57,7 @@ class AzureAgentInstancesTest extends BaseTest {
 
   @BeforeEach
   void setup() {
-    initMocks(this);
+    openMocks(this);
     instances = new AzureAgentInstances(mockAzureInstanceManager, mockClock, mockClientFactory);
   }
 

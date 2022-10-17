@@ -25,7 +25,7 @@ import org.mockito.Mock;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static org.mockito.MockitoAnnotations.initMocks;
+import static org.mockito.MockitoAnnotations.openMocks;
 
 class RequestFingerprintCacheTest {
 
@@ -34,7 +34,7 @@ class RequestFingerprintCacheTest {
 
   @BeforeEach
   void setup() {
-    initMocks(this);
+    openMocks(this);
   }
 
   @Test

@@ -30,7 +30,7 @@ import static com.thoughtworks.gocd.elasticagent.azure.models.Platform.WINDOWS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
-import static org.mockito.MockitoAnnotations.initMocks;
+import static org.mockito.MockitoAnnotations.openMocks;
 
 class ImageMetadataTest extends BaseTest {
 
@@ -41,7 +41,7 @@ class ImageMetadataTest extends BaseTest {
 
   @BeforeEach
   void setUp() {
-    initMocks(this);
+    openMocks(this);
     imageMetadata = new ImageMetadata("vm_image_urn", "vm_custom_image_id");
   }
 

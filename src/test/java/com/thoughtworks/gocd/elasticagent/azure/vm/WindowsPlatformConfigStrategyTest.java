@@ -52,7 +52,7 @@ class WindowsPlatformConfigStrategyTest extends BaseTest {
 
   @BeforeEach
   void setUp() {
-    MockitoAnnotations.initMocks(this);
+    MockitoAnnotations.openMocks(this);
     windowsPlatformConfigStrategy = new WindowsPlatformConfigStrategy(mockCustomScriptBuilder);
   }
 

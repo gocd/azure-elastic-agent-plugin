@@ -50,7 +50,7 @@ import static com.thoughtworks.gocd.elasticagent.azure.vm.VMTags.GOCD_SERVER_ID_
 import static java.util.Arrays.asList;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
-import static org.mockito.MockitoAnnotations.initMocks;
+import static org.mockito.MockitoAnnotations.openMocks;
 
 class GoCDAzureClientTest extends BaseTest {
 
@@ -65,7 +65,7 @@ class GoCDAzureClientTest extends BaseTest {
 
   @BeforeEach
   void setUp() {
-    initMocks(this);
+    openMocks(this);
     goCDAzureClient = new GoCDAzureClient(azure, resourceGroup, mockNetworkDecorator);
 
   }

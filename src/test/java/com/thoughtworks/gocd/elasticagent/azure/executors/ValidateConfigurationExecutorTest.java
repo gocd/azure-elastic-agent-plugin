@@ -36,7 +36,7 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-import static org.mockito.MockitoAnnotations.initMocks;
+import static org.mockito.MockitoAnnotations.openMocks;
 import static org.skyscreamer.jsonassert.JSONCompareMode.NON_EXTENSIBLE;
 
 class ValidateConfigurationExecutorTest {
@@ -51,7 +51,7 @@ class ValidateConfigurationExecutorTest {
 
   @BeforeEach
   void setUp() {
-    initMocks(this);
+    openMocks(this);
     settings = new HashMap<>();
   }
 

@@ -32,7 +32,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
-import static org.mockito.MockitoAnnotations.initMocks;
+import static org.mockito.MockitoAnnotations.openMocks;
 
 class AzureNetworkSettingsValidationTest {
 
@@ -42,7 +42,7 @@ class AzureNetworkSettingsValidationTest {
 
   @BeforeEach
   void setUp() {
-    initMocks(this);
+    openMocks(this);
     validation = new AzureNetworkSettingsValidation();
   }
 

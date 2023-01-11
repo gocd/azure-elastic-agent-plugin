@@ -1,7 +1,9 @@
+#!/usr/bin/env bash
+
 set -e
 
 agent_dir="/var/lib/go-agent"
-default_jre_dir="/var/lib/jdk/jdk-12"
+default_jre_dir="/var/lib/jdk/jdk-11.0.17"
 
 if [ ! -x "$(command -v java)" ]; then
      export GO_JAVA_HOME=$default_jre_dir

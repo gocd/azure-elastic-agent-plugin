@@ -2,17 +2,17 @@
 
 set -e
 
-java_download_url="https://download.java.net/java/GA/jdk13.0.2/d4173c853231432d94f001e99d882ca7/8/GPL/openjdk-13.0.2_linux-x64_bin.tar.gz"
+java_download_url="https://download.bell-sw.com/java/11.0.17+7/bellsoft-jdk11.0.17+7-linux-amd64.tar.gz"
 
 reset_dir () {
    rm -rf $1
-   mkdir $1
+   mkdir -p $1
 }
 
 install_java () {
       wget $java_download_url
       reset_dir /var/lib/jdk
-      tar -xvf openjdk-13.0.2_linux-x64_bin.tar.gz -C /var/lib/jdk/
+      tar -xvf bellsoft-jdk11.0.17+7-linux-amd64.tar.gz -C /var/lib/jdk/
 }
 
 echo "Setting up unzip utility"

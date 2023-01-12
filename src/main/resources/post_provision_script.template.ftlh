@@ -2,7 +2,7 @@
 
 set -e
 
-java_download_url="https://download.bell-sw.com/java/11.0.17+7/bellsoft-jdk11.0.17+7-linux-amd64.tar.gz"
+java_download_url="https://api.adoptium.net/v3/binary/version/jdk-17.0.5%2B8/linux/x64/jre/hotspot/normal/eclipse?project=jdk"
 
 reset_dir () {
    rm -rf $1
@@ -10,9 +10,9 @@ reset_dir () {
 }
 
 install_java () {
-      wget $java_download_url
+      wget $java_download_url --output-document=jre17.tar.gz 
       reset_dir /var/lib/jdk
-      tar -xvf bellsoft-jdk11.0.17+7-linux-amd64.tar.gz -C /var/lib/jdk/
+      tar -xvf jre17.tar.gz -C /var/lib/jdk/
 }
 
 echo "Setting up unzip utility"

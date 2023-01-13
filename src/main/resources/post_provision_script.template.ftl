@@ -1,18 +1,24 @@
+<#-- @ftlvariable name="agent_id" type="java.lang.String" -->
+<#-- @ftlvariable name="plugin_id" type="java.lang.String" -->
+<#-- @ftlvariable name="environment" type="java.lang.String" -->
+<#-- @ftlvariable name="autoregister_key" type="java.lang.String" -->
+<#-- @ftlvariable name="version" type="java.lang.String" -->
+<#-- @ftlvariable name="jre_feature_version" type="java.lang.String" -->
 #!/usr/bin/env bash
 
 set -e
 
-java_download_url="https://download.java.net/java/GA/jdk13.0.2/d4173c853231432d94f001e99d882ca7/8/GPL/openjdk-13.0.2_linux-x64_bin.tar.gz"
+java_download_url="https://api.adoptium.net/v3/binary/latest/${jre_feature_version}/ga/linux/x64/jre/hotspot/normal/eclipse"
 
 reset_dir () {
    rm -rf $1
-   mkdir $1
+   mkdir -p $1
 }
 
 install_java () {
-      wget $java_download_url
+      wget $java_download_url --output-document=jre.tar.gz
       reset_dir /var/lib/jdk
-      tar -xvf openjdk-13.0.2_linux-x64_bin.tar.gz -C /var/lib/jdk/
+      tar -xvf jre.tar.gz --directory /var/lib/jdk/${jre_feature_version}-jre --strip 1
 }
 
 echo "Setting up unzip utility"

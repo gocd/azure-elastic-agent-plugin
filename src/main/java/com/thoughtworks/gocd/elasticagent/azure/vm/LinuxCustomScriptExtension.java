@@ -16,6 +16,7 @@
 
 package com.thoughtworks.gocd.elasticagent.azure.vm;
 
+import com.thoughtworks.gocd.elasticagent.azure.Constants;
 import com.thoughtworks.gocd.elasticagent.azure.DownloadUrls;
 
 import java.util.*;
@@ -35,13 +36,14 @@ public class LinuxCustomScriptExtension implements AzureVMExtension {
                                     String pluginId,
                                     String agentId) {
     this.goAgentVersion = goAgentVersion;
-    this.installParams = new HashMap<String, String>() {{
+    this.installParams = new HashMap<>() {{
       put("version", goAgentVersion);
       put("go_server_url", goServerUrl);
       put("autoregister_key", autoRegisterKey);
       put("environment", environment);
       put("plugin_id", pluginId);
       put("agent_id", agentId);
+      put("jre_feature_version", Constants.DEFAULT_JRE_FEATURE_VERSION);
     }};
 
   }
@@ -60,7 +62,7 @@ public class LinuxCustomScriptExtension implements AzureVMExtension {
 
   public String getScript() {
     return new CustomScriptBuilder()
-        .withScript("post_provision_script.template.ftlh", this.installParams)
+        .withScript("post_provision_script.template.ftl", this.installParams)
         .base64Encoded()
         .build();
   }

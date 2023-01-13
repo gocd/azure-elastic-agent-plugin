@@ -21,14 +21,16 @@ import com.microsoft.azure.management.compute.VirtualMachine;
 import com.microsoft.azure.management.compute.VirtualMachine.DefinitionStages.WithCreate;
 import com.microsoft.azure.management.compute.VirtualMachines;
 import com.thoughtworks.gocd.elasticagent.azure.AgentConfig;
+import com.thoughtworks.gocd.elasticagent.azure.Constants;
 import com.thoughtworks.gocd.elasticagent.azure.utils.Util;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 public class LinuxPlatformConfigStrategy implements PlatformConfigStrategy {
-  public static final String LINUX_START_GO_AGENT_TEMPLATE = "linux_start_go_agent.template.flth";
+  public static final String LINUX_START_GO_AGENT_TEMPLATE = "linux_start_go_agent.template.ftl";
   private CustomScriptBuilder customScriptBuilder;
 
   public LinuxPlatformConfigStrategy(CustomScriptBuilder customScriptBuilder) {
@@ -82,7 +84,7 @@ public class LinuxPlatformConfigStrategy implements PlatformConfigStrategy {
   }
 
   private String startGoAgentScript(AgentConfig agentConfig) {
-    return customScriptBuilder.withScript(LINUX_START_GO_AGENT_TEMPLATE, Collections.singletonMap("go_server_url", agentConfig.getServerUrl())).build();
+    return customScriptBuilder.withScript(LINUX_START_GO_AGENT_TEMPLATE, Map.of("go_server_url", agentConfig.getServerUrl(), "jre_feature_version", Constants.DEFAULT_JRE_FEATURE_VERSION)).build();
   }
 
 }

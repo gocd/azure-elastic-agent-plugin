@@ -18,7 +18,7 @@ package com.thoughtworks.gocd.elasticagent.azure;
 
 import com.thoughtworks.gocd.elasticagent.azure.utils.HttpUtil;
 
-import static com.thoughtworks.gocd.elasticagent.azure.Constants.SUPPORTED_GO_SERVER_VERSION;
+import static com.thoughtworks.gocd.elasticagent.azure.Constants.DEFAULT_GO_SERVER_VERSION;
 
 public class DownloadUrls {
   public static final String UNZIP_TAR_DOWNLOAD_URL = "https://oss.oracle.com/el4/unzip/unzip.tar";
@@ -27,13 +27,13 @@ public class DownloadUrls {
 
   public static String linuxGoAgent(String goAgentVersion) {
     String latestGoAgentUrl = String.format(GO_AGENT_LINUX_DOWNLOAD_URL_FORMAT, goAgentVersion, goAgentVersion);
-    String defaultGoAgentUrl = String.format(GO_AGENT_LINUX_DOWNLOAD_URL_FORMAT, SUPPORTED_GO_SERVER_VERSION, SUPPORTED_GO_SERVER_VERSION);
+    String defaultGoAgentUrl = String.format(GO_AGENT_LINUX_DOWNLOAD_URL_FORMAT, DEFAULT_GO_SERVER_VERSION, DEFAULT_GO_SERVER_VERSION);
     return HttpUtil.isValidUrl(latestGoAgentUrl) ? latestGoAgentUrl : defaultGoAgentUrl;
   }
 
   public static String windowsGoAgent(String goAgentVersion) {
     String latestGoAgentUrl = String.format(GO_AGENT_WINDOWS_DOWNLOAD_URL_FORMAT, goAgentVersion, goAgentVersion);
-    String defaultGoAgentUrl = String.format(GO_AGENT_WINDOWS_DOWNLOAD_URL_FORMAT, SUPPORTED_GO_SERVER_VERSION, SUPPORTED_GO_SERVER_VERSION);
+    String defaultGoAgentUrl = String.format(GO_AGENT_WINDOWS_DOWNLOAD_URL_FORMAT, DEFAULT_GO_SERVER_VERSION, DEFAULT_GO_SERVER_VERSION);
     return HttpUtil.isValidUrl(latestGoAgentUrl) ? latestGoAgentUrl : defaultGoAgentUrl;
   }
 }

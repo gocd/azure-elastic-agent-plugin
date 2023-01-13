@@ -19,6 +19,7 @@ package com.thoughtworks.gocd.elasticagent.azure.client;
 import com.microsoft.azure.management.Azure;
 import com.microsoft.azure.management.compute.VirtualMachine.DefinitionStages.WithNetwork;
 import com.microsoft.azure.management.compute.VirtualMachine.DefinitionStages.WithOS;
+import com.microsoft.azure.management.compute.VirtualMachine.DefinitionStages.WithProximityPlacementGroup;
 import com.microsoft.azure.management.network.Network;
 import com.microsoft.azure.management.network.NetworkInterface;
 import com.microsoft.azure.management.network.NetworkInterface.DefinitionStages.Blank;
@@ -53,7 +54,7 @@ class NetworkDecoratorTest {
   void shouldAddNetworkInterfaceWithSecurityGroupAssociatedToTheSubnet() {
     VmConfig vmConfig = mock(VmConfig.class);
     WithNetwork withNetwork = mock(WithNetwork.class, RETURNS_DEEP_STUBS);
-    WithOS expectedWithOS = mock(WithOS.class);
+    WithProximityPlacementGroup expectedWithPpg = mock(WithProximityPlacementGroup.class);
     NetworkInterface networkInterface = mock(NetworkInterface.class);
     Network existingNetwork = mock(Network.class);
     NetworkSecurityGroup existingNSG = mock(NetworkSecurityGroup.class);
@@ -80,11 +81,11 @@ class NetworkDecoratorTest {
         .withExistingNetworkSecurityGroup(existingNSG)
         .create())
         .thenReturn(networkInterface);
-    when(withNetwork.withExistingPrimaryNetworkInterface(networkInterface)).thenReturn(expectedWithOS);
+    when(withNetwork.withExistingPrimaryNetworkInterface(networkInterface)).thenReturn(expectedWithPpg);
 
     WithOS withOS = networkDecorator.add(withNetwork, vmConfig);
 
-    assertEquals(expectedWithOS, withOS);
+    assertEquals(expectedWithPpg, withOS);
   }
 
   @Test
@@ -100,7 +101,7 @@ class NetworkDecoratorTest {
   private void assertNSGIsSkippedWhenIDProvidedIs(String nsgID) {
     VmConfig vmConfig = mock(VmConfig.class);
     WithNetwork withNetwork = mock(WithNetwork.class, RETURNS_DEEP_STUBS);
-    WithOS expectedWithOS = mock(WithOS.class);
+    WithProximityPlacementGroup expectedWithPpg = mock(WithProximityPlacementGroup.class);
     NetworkInterface networkInterface = mock(NetworkInterface.class);
     Network existingNetwork = mock(Network.class);
     WithGroup mockWithGroup = mock(WithGroup.class, RETURNS_DEEP_STUBS);
@@ -123,11 +124,11 @@ class NetworkDecoratorTest {
             .withPrimaryPrivateIPAddressDynamic()
             .create())
             .thenReturn(networkInterface);
-    when(withNetwork.withExistingPrimaryNetworkInterface(networkInterface)).thenReturn(expectedWithOS);
+    when(withNetwork.withExistingPrimaryNetworkInterface(networkInterface)).thenReturn(expectedWithPpg);
 
     WithOS withOS = networkDecorator.add(withNetwork, vmConfig);
 
-    assertEquals(expectedWithOS, withOS);
+    assertEquals(expectedWithPpg, withOS);
     verify(mockAzure.networkSecurityGroups(), never()).getByResourceGroup(anyString(), anyString());
   }
 

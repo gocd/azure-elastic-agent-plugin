@@ -35,11 +35,11 @@ class OsDiskStorageTypeValidationTest {
     Map<String, String> errors = new OsDiskStorageTypeValidation().run(properties, null, null);
 
     assertEquals(1, errors.size());
-    assertEquals("Supported OS disk storage types: Premium_LRS, StandardSSD_LRS, Standard_LRS.", errors.get("os_disk_storage_account_type"));
+    assertEquals("Supported OS disk storage types: Premium_LRS, StandardSSD_LRS, UltraSSD_LRS, Standard_LRS.", errors.get("os_disk_storage_account_type"));
   }
 
   @ParameterizedTest
-  @ValueSource(strings = {"Standard_LRS", "Premium_LRS", "StandardSSD_LRS"})
+  @ValueSource(strings = {"Standard_LRS", "Premium_LRS", "UltraSSD_LRS", "StandardSSD_LRS"})
   void shouldValidateOsDiskStorageTypeIsValid(String osDiskStorageType) {
     Map<String, String> properties = Collections.singletonMap("os_disk_storage_account_type", osDiskStorageType);
 

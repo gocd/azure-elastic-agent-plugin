@@ -146,6 +146,7 @@ class LinuxPlatformConfigStrategyTest extends BaseTest {
       put("environment", "Test");
       put("plugin_id", Util.pluginId());
       put("agent_id", vmConfig.getName());
+      put("jre_feature_version", "17");
     }};
     assertEquals(expectedInstallParams, installParams);
   }
@@ -177,7 +178,7 @@ class LinuxPlatformConfigStrategyTest extends BaseTest {
 
     Map<String, String> params = paramCaptor.getValue();
     verify(mockVirtualMachines).runShellScript("groupName", "vmName", Collections.singletonList("start agent script"), Collections.emptyList());
-    assertEquals(Collections.singletonMap("go_server_url", serverURL), params);
+    assertEquals(Map.of("go_server_url", serverURL, "jre_feature_version", "17"), params);
     assertEquals(mockResult, actualResult);
   }
 

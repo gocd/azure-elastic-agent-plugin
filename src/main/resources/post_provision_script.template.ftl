@@ -1,8 +1,14 @@
+<#-- @ftlvariable name="agent_id" type="java.lang.String" -->
+<#-- @ftlvariable name="plugin_id" type="java.lang.String" -->
+<#-- @ftlvariable name="environment" type="java.lang.String" -->
+<#-- @ftlvariable name="autoregister_key" type="java.lang.String" -->
+<#-- @ftlvariable name="version" type="java.lang.String" -->
+<#-- @ftlvariable name="jre_feature_version" type="java.lang.String" -->
 #!/usr/bin/env bash
 
 set -e
 
-java_download_url="https://api.adoptium.net/v3/binary/version/jdk-17.0.5%2B8/linux/x64/jre/hotspot/normal/eclipse?project=jdk"
+java_download_url="https://api.adoptium.net/v3/binary/latest/${jre_feature_version}/ga/linux/x64/jre/hotspot/normal/eclipse"
 
 reset_dir () {
    rm -rf $1
@@ -10,9 +16,9 @@ reset_dir () {
 }
 
 install_java () {
-      wget $java_download_url --output-document=jre17.tar.gz 
+      wget $java_download_url --output-document=jre.tar.gz
       reset_dir /var/lib/jdk
-      tar -xvf jre17.tar.gz -C /var/lib/jdk/
+      tar -xvf jre.tar.gz --directory /var/lib/jdk/${jre_feature_version}-jre --strip 1
 }
 
 echo "Setting up unzip utility"

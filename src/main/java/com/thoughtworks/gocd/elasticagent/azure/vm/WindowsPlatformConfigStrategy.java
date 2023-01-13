@@ -31,8 +31,8 @@ import java.util.Map;
 import static com.thoughtworks.gocd.elasticagent.azure.AzurePlugin.LOG;
 
 public class WindowsPlatformConfigStrategy implements PlatformConfigStrategy {
-  public static final String WINDOWS_START_GO_AGENT_TEMPLATE = "windows_start_go_agent.template.flth";
-  public static final String WINDOWS_INSTALL_GO_AGENT_TEMPLATE = "windows_install_go_agent.template.flth";
+  public static final String WINDOWS_START_GO_AGENT_TEMPLATE = "windows_start_go_agent.template.ftl";
+  public static final String WINDOWS_INSTALL_GO_AGENT_TEMPLATE = "windows_install_go_agent.template.ftl";
   private CustomScriptBuilder customScriptBuilder;
 
   public WindowsPlatformConfigStrategy(CustomScriptBuilder scriptBuilder) {

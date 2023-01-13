@@ -22,7 +22,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.thoughtworks.gocd.elasticagent.azure.Constants.SUPPORTED_GO_SERVER_VERSION;
+import static com.thoughtworks.gocd.elasticagent.azure.Constants.DEFAULT_GO_SERVER_VERSION;
 import static com.thoughtworks.gocd.elasticagent.azure.DownloadUrls.UNZIP_TAR_DOWNLOAD_URL;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -40,9 +40,9 @@ class LinuxCustomScriptExtensionTest {
     );
 
     List<String> expectedFileUris = Arrays.asList(UNZIP_TAR_DOWNLOAD_URL,
-        String.format(DownloadUrls.GO_AGENT_LINUX_DOWNLOAD_URL_FORMAT, SUPPORTED_GO_SERVER_VERSION, SUPPORTED_GO_SERVER_VERSION));
+        String.format(DownloadUrls.GO_AGENT_LINUX_DOWNLOAD_URL_FORMAT, DEFAULT_GO_SERVER_VERSION, DEFAULT_GO_SERVER_VERSION));
     String base64EncodedScript = new CustomScriptBuilder()
-        .withScript("post_provision_script.template.ftlh", extension.getInstallParams())
+        .withScript("post_provision_script.template.ftl", extension.getInstallParams())
         .base64Encoded()
         .build();
 

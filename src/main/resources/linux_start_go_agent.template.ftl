@@ -1,9 +1,11 @@
+<#-- @ftlvariable name="go_server_url" type="java.lang.String" -->
+<#-- @ftlvariable name="jre_feature_version" type="java.lang.String" -->
 #!/usr/bin/env bash
 
 set -e
 
 agent_dir="/var/lib/go-agent"
-default_jre_dir="/var/lib/jdk/jdk-17.0.5+8-jre"
+default_jre_dir="/var/lib/jdk/${jre_feature_version}-jre"
 
 if [ ! -x "$(command -v java)" ]; then
      export GO_JAVA_HOME=$default_jre_dir

@@ -34,7 +34,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import static com.thoughtworks.gocd.elasticagent.azure.Constants.SUPPORTED_GO_SERVER_VERSION;
+import static com.thoughtworks.gocd.elasticagent.azure.Constants.DEFAULT_GO_SERVER_VERSION;
 import static com.thoughtworks.gocd.elasticagent.azure.models.Platform.LINUX;
 import static com.thoughtworks.gocd.elasticagent.azure.utils.Util.uniqueString;
 import static com.thoughtworks.gocd.elasticagent.azure.vm.VMTags.*;
@@ -214,7 +214,7 @@ public class VmConfig {
 
     public Builder setServerInfoParams(ServerInfo serverInfo) {
       tags.put(GOCD_SERVER_ID_TAG_KEY, serverInfo.getServerId());
-      this.serverVersion = Optional.ofNullable(serverInfo.getServerVersion()).orElse(SUPPORTED_GO_SERVER_VERSION);
+      this.serverVersion = Optional.ofNullable(serverInfo.getServerVersion()).orElse(DEFAULT_GO_SERVER_VERSION);
       return this;
     }
 

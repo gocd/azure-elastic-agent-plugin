@@ -46,6 +46,7 @@ public interface Constants {
   String REQUEST_SERVER_INFO = REQUEST_SERVER_PREFIX + ".server-info.get";
   String REQUEST_ADD_SERVER_HEALTH_MESSAGES = REQUEST_SERVER_PREFIX + ".server-health.add-messages";
 
-  String SUPPORTED_GO_SERVER_VERSION= "20.5.0-11820";
+  String DEFAULT_GO_SERVER_VERSION = "22.3.0-15301";
+  String DEFAULT_JRE_FEATURE_VERSION = "17";
 
 }

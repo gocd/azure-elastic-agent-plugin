@@ -17,7 +17,7 @@ reset_dir () {
 
 install_java () {
       wget $java_download_url --output-document=jre.tar.gz
-      reset_dir /var/lib/jdk
+      reset_dir /var/lib/jdk/${jre_feature_version}-jre
       tar -xvf jre.tar.gz --directory /var/lib/jdk/${jre_feature_version}-jre --strip 1
 }
 

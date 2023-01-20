@@ -69,7 +69,7 @@ dependencies {
   implementation group: 'joda-time', name: 'joda-time', version: '2.12.2'
 
   implementation group: 'com.microsoft.azure', name: 'azure', version: '1.41.4'
-  implementation group: 'org.freemarker', name: 'freemarker', version: '2.3.31'
+  implementation group: 'org.freemarker', name: 'freemarker', version: '2.3.32'
 
   testImplementation platform('org.junit:junit-bom:5.9.2')
   testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api'

@@ -51,7 +51,7 @@ repositories {
 ext {
   deps = [
       gocdPluginApi: 'cd.go.plugin:go-plugin-api:22.3.0',
-      lombok       : 'org.projectlombok:lombok:1.18.24',
+      lombok       : 'org.projectlombok:lombok:1.18.26',
   ]
 
   versions = project.ext.deps.collectEntries { lib, libGav -> [lib, libGav.split(':').last()] }

@@ -18,7 +18,7 @@ package com.thoughtworks.gocd.elasticagent.azure.validations;
 
 import com.thoughtworks.gocd.elasticagent.azure.PluginSettings;
 import com.thoughtworks.gocd.elasticagent.azure.client.GoCDAzureClient;
-import com.thoughtworks.gocd.elasticagent.azure.executors.GetProfileMetadataExecutor;
+import com.thoughtworks.gocd.elasticagent.azure.executors.GetElasticAgentProfileMetadataExecutor;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,7 +27,7 @@ public class MetadataValidation implements Validation {
   @Override
   public Map<String, String> run(Map<String, String> properties, PluginSettings settings, GoCDAzureClient client) {
     HashMap<String, String> errors = new HashMap<>();
-    GetProfileMetadataExecutor.FIELDS.stream().forEach(field -> {
+    GetElasticAgentProfileMetadataExecutor.FIELDS.stream().forEach(field -> {
       Map<String, String> validationError = field.validate(properties.get(field.getKey()));
       if (!validationError.isEmpty()) {
         errors.putAll(validationError);

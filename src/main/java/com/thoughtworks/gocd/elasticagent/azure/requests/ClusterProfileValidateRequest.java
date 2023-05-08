@@ -21,17 +21,17 @@ import com.google.gson.reflect.TypeToken;
 import com.thoughtworks.gocd.elasticagent.azure.PluginRequest;
 import com.thoughtworks.gocd.elasticagent.azure.RequestExecutor;
 import com.thoughtworks.gocd.elasticagent.azure.client.GoCDAzureClientFactory;
-import com.thoughtworks.gocd.elasticagent.azure.executors.ProfileValidateRequestExecutor;
+import com.thoughtworks.gocd.elasticagent.azure.executors.ClusterProfileValidateRequestExecutor;
 import com.thoughtworks.gocd.elasticagent.azure.validations.Validation;
 
 import java.util.Map;
 
-public class ProfileValidateRequest {
+public class ClusterProfileValidateRequest {
 
   private static final Gson GSON = new Gson();
   private Map<String, String> properties;
 
-  public ProfileValidateRequest(Map<String, String> properties) {
+  public ClusterProfileValidateRequest(Map<String, String> properties) {
     this.properties = properties;
   }
 
@@ -40,12 +40,12 @@ public class ProfileValidateRequest {
     return properties;
   }
 
-  public static ProfileValidateRequest fromJSON(String json) {
-    return new ProfileValidateRequest(GSON.fromJson(json, new TypeToken<Map<String, String>>() {
+  public static ClusterProfileValidateRequest fromJSON(String json) {
+    return new ClusterProfileValidateRequest(GSON.fromJson(json, new TypeToken<Map<String, String>>() {
     }.getType()));
   }
 
   public RequestExecutor executor(PluginRequest pluginRequest, GoCDAzureClientFactory factory) {
-    return new ProfileValidateRequestExecutor(this, pluginRequest, factory, Validation.ELASTIC_PROFILE_VALIDATIONS);
+    return new ClusterProfileValidateRequestExecutor(this, pluginRequest, factory, Validation.ELASTIC_PROFILE_VALIDATIONS);
   }
 }

@@ -16,7 +16,6 @@
 
 package com.thoughtworks.gocd.elasticagent.azure.executors;
 
-import com.google.common.io.BaseEncoding;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.thoughtworks.go.plugin.api.response.DefaultGoPluginApiResponse;
@@ -24,16 +23,15 @@ import com.thoughtworks.go.plugin.api.response.GoPluginApiResponse;
 import com.thoughtworks.gocd.elasticagent.azure.RequestExecutor;
 import com.thoughtworks.gocd.elasticagent.azure.utils.Util;
 
-public class GetPluginSettingsIconExecutor implements RequestExecutor {
+public class GetElasticAgentProfileViewExecutor implements RequestExecutor {
   private static final Gson GSON = new Gson();
 
   @Override
   public GoPluginApiResponse execute() throws Exception {
     JsonObject jsonObject = new JsonObject();
-    jsonObject.addProperty("content_type", "image/svg+xml");
-    jsonObject.addProperty("data", BaseEncoding.base64().encode(Util.readResourceBytes("/plugin-icon.svg")));
+    jsonObject.addProperty("template", Util.readResource("/profile.template.html"));
     DefaultGoPluginApiResponse defaultGoPluginApiResponse = new DefaultGoPluginApiResponse(200, GSON.toJson(jsonObject));
     return defaultGoPluginApiResponse;
-
   }
+
 }

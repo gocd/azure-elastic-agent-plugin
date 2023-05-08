@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.thoughtworks.gocd.elasticagent.azure.requests;
 
 import com.google.gson.FieldNamingPolicy;
@@ -25,19 +24,22 @@ import com.thoughtworks.gocd.elasticagent.azure.PluginRequest;
 import com.thoughtworks.gocd.elasticagent.azure.executors.AgentStatusReportExecutor;
 import com.thoughtworks.gocd.elasticagent.azure.models.JobIdentifier;
 import com.thoughtworks.gocd.elasticagent.azure.utils.TemplateReader;
-
 import java.util.Objects;
 
 public class AgentStatusReportRequest {
+
   private static final Gson GSON = new GsonBuilder().excludeFieldsWithoutExposeAnnotation()
-      .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-      .create();
+    .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+    .create();
 
   @Expose
   private String elasticAgentId;
 
   @Expose
   private JobIdentifier jobIdentifier;
+
+  @Expose
+  private ClusterProfileProperties clusterProfileProperties;
 
   public AgentStatusReportRequest() {
   }
@@ -65,11 +67,15 @@ public class AgentStatusReportRequest {
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
     AgentStatusReportRequest that = (AgentStatusReportRequest) o;
-    return Objects.equals(elasticAgentId, that.elasticAgentId) &&
-        Objects.equals(jobIdentifier, that.jobIdentifier);
+    return Objects.equals(elasticAgentId, that.elasticAgentId)
+      && Objects.equals(jobIdentifier, that.jobIdentifier);
   }
 
   @Override
@@ -79,9 +85,9 @@ public class AgentStatusReportRequest {
 
   @Override
   public String toString() {
-    return "AgentStatusReportRequest{" +
-        "elasticAgentId='" + elasticAgentId + '\'' +
-        ", jobIdentifierHash=" + jobIdentifier +
-        '}';
+    return "AgentStatusReportRequest{"
+      + "elasticAgentId='" + elasticAgentId + '\''
+      + ", jobIdentifierHash=" + jobIdentifier
+      + '}';
   }
 }

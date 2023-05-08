@@ -32,7 +32,7 @@ class GetPluginSettingsIconExecutorTest {
 
   @Test
   void rendersIconInBase64() throws Exception {
-    GoPluginApiResponse response = new GetPluginSettingsIconExecutor().execute();
+    GoPluginApiResponse response = new GetPluginIconExecutor().execute();
     HashMap<String, String> hashMap = new Gson().fromJson(response.responseBody(), new TypeToken<HashMap<String, String>>() {
     }.getType());
     assertThat(hashMap.size(), is(2));

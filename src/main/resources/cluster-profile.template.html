@@ -197,7 +197,7 @@
       <div class="param-row">
         <div class="col text-area">
           <label>SSH public key<span class='asterix'>*</span></label>
-          <textarea rows="6" cols="50" ng-model="ssh_key" ng-required="true"/>
+          <textarea rows="6" cols="50" ng-model="ssh_key" ng-required="true"></textarea>
           <span class="form_error" ng-class="{'is-visible': GOINPUTNAME[ssh_key].$error.server}" ng-show="GOINPUTNAME[ssh_key].$error.server">{{GOINPUTNAME[ssh_key].$error.server}}</span>
           <div class="help-content">
             Use these credentials to log into Linux agent virtual machines.

@@ -33,18 +33,18 @@ class GetPluginConfigurationExecutorTest {
 
   @Test
   void shouldSerializeAllFields() {
-    GoPluginApiResponse response = new GetPluginConfigurationExecutor().execute();
+    GoPluginApiResponse response = new GetClusterProfileMetadataExecutor().execute();
     Map<String, Field> hashMap = new Gson().fromJson(response.responseBody(), new TypeToken<Map<String, Field>>() {
     }.getType());
     assertEquals(hashMap.size(),
-        GetPluginConfigurationExecutor.FIELDS.size(),
+        GetClusterProfileMetadataExecutor.CLUSTER_PROFILE_FIELDS.size(),
         "Are you using anonymous inner classes — see https://github.com/google/gson/issues/298"
     );
   }
 
   @Test
   void assertJsonStructure() throws Exception {
-    GoPluginApiResponse response = new GetPluginConfigurationExecutor().execute();
+    GoPluginApiResponse response = new GetClusterProfileMetadataExecutor().execute();
 
     assertThat(response.responseCode(), is(200));
     String expectedJSON = "{\n" +

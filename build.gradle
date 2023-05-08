@@ -19,7 +19,7 @@ apply plugin: 'java'
 
 gocdPlugin {
   id = 'com.thoughtworks.gocd.elastic-agent.azure'
-  pluginVersion = '1.2.0'
+  pluginVersion = '1.2.1'
   goCdVersion = '21.4.0'
   name = 'GoCD Elastic Agent Plugin for Azure'
   description = 'GoCD Elastic Agent Plugin for Azure allows efficient usage of Azure instances'

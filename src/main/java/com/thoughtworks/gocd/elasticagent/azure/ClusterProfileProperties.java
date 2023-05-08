@@ -18,7 +18,6 @@ package com.thoughtworks.gocd.elasticagent.azure;
 import java.util.Map;
 import org.joda.time.Period;
 
-// TODO: Implement any settings that your plugin needs
 public class ClusterProfileProperties extends PluginSettings {
 
   public ClusterProfileProperties() {

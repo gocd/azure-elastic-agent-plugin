@@ -15,18 +15,30 @@
  */
 package com.thoughtworks.gocd.elasticagent.azure;
 
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import java.util.Objects;
 
 public class ClusterProfile {
 
+  public static final Gson GSON = new GsonBuilder()
+    .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+    .excludeFieldsWithoutExposeAnnotation()
+    .create();
+
   @Expose
+  @SerializedName("id")
   private final String id;
 
   @Expose
+  @SerializedName("plugin_id")
   private final String pluginId;
 
   @Expose
+  @SerializedName("properties")
   private final ClusterProfileProperties properties;
 
   public ClusterProfile() {

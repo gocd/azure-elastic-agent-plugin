@@ -19,11 +19,14 @@ import com.google.gson.FieldNamingPolicy;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import com.thoughtworks.gocd.elasticagent.azure.AzureAgentInstances;
+import com.thoughtworks.gocd.elasticagent.azure.ClusterProfileProperties;
 import com.thoughtworks.gocd.elasticagent.azure.PluginRequest;
 import com.thoughtworks.gocd.elasticagent.azure.executors.AgentStatusReportExecutor;
 import com.thoughtworks.gocd.elasticagent.azure.models.JobIdentifier;
 import com.thoughtworks.gocd.elasticagent.azure.utils.TemplateReader;
+import java.util.Map;
 import java.util.Objects;
 
 public class AgentStatusReportRequest {
@@ -39,14 +42,19 @@ public class AgentStatusReportRequest {
   private JobIdentifier jobIdentifier;
 
   @Expose
+  @SerializedName("cluster_profile_properties")
+  private ClusterProfileProperties clusterProfile;
+
+  @Expose
   private ClusterProfileProperties clusterProfileProperties;
 
   public AgentStatusReportRequest() {
   }
 
-  public AgentStatusReportRequest(String elasticAgentId, JobIdentifier jobIdentifier) {
+  public AgentStatusReportRequest(String elasticAgentId, JobIdentifier jobIdentifier, Map<String, String> clusterProfileProperties) {
     this.elasticAgentId = elasticAgentId;
     this.jobIdentifier = jobIdentifier;
+    this.clusterProfile = ClusterProfileProperties.fromConfiguration(clusterProfileProperties);
   }
 
   public static AgentStatusReportRequest fromJSON(String json) {
@@ -59,6 +67,10 @@ public class AgentStatusReportRequest {
 
   public JobIdentifier getJobIdentifier() {
     return jobIdentifier;
+  }
+
+  public ClusterProfileProperties getClusterProfile() {
+    return clusterProfile;
   }
 
   public AgentStatusReportExecutor executor(PluginRequest pluginRequest, AzureAgentInstances agentInstances, TemplateReader templateReader) {

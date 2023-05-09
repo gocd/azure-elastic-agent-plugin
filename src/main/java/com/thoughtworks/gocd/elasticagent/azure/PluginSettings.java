@@ -20,8 +20,12 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
-import java.util.Map;
+import com.microsoft.azure.management.resources.fluentcore.arm.Region;
+import com.thoughtworks.gocd.elasticagent.azure.utils.Util;
+import java.util.Objects;
+import lombok.AccessLevel;
 import lombok.Getter;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 import org.joda.time.Period;
 
 @Getter
@@ -41,37 +45,104 @@ public class PluginSettings {
   private String autoRegisterTimeout;
 
   @Expose
-  @SerializedName("api_user")
-  private String apiUser;
+  @SerializedName("idle_timeout")
+  private String idleTimeout;
 
   @Expose
-  @SerializedName("api_key")
-  private String apiKey;
+  @SerializedName("domain")
+  private String domain;
 
   @Expose
-  @SerializedName("api_url")
-  private String apiUrl;
+  @SerializedName("client_id")
+  private String clientId;
+
+  @Expose
+  @SerializedName("secret")
+  private String secret;
+
+  @Expose
+  @SerializedName("network_id")
+  private String networkId;
+
+  @Expose
+  @SerializedName("subnet")
+  @Getter(AccessLevel.NONE)
+  private String subnetNames;
+
+  @Expose
+  @SerializedName("network_security_group_id")
+  private String networkSecurityGroupId;
+
+  @Expose
+  @SerializedName("resource_group")
+  private String resourceGroup;
+
+  @Expose
+  @SerializedName("region_name")
+  @Getter(AccessLevel.NONE)
+  private String regionName;
+
+  @Expose
+  @SerializedName("linux_user_name")
+  private String linuxUserName;
+
+  @Expose
+  @SerializedName("ssh_key")
+  private String sshKey;
+
+  @Expose
+  @SerializedName("windows_user_name")
+  private String windowsUserName;
+
+  @Expose
+  @SerializedName("windows_password")
+  private String windowsPassword;
 
   private Period autoRegisterPeriod;
+  private Period idleTimeoutPeriod;
 
-  public PluginSettings() {
-  }
-
-  public PluginSettings(String goServerUrl, String autoRegisterTimeout, String apiUser, String apiKey, String apiUrl, Period autoRegisterPeriod) {
-    this.goServerUrl = goServerUrl;
-    this.autoRegisterTimeout = autoRegisterTimeout;
-    this.apiUser = apiUser;
-    this.apiKey = apiKey;
-    this.apiUrl = apiUrl;
-    this.autoRegisterPeriod = autoRegisterPeriod;
-  }
+  @Getter(AccessLevel.NONE)
+  private String[] subnetNamesArray;
 
   public static PluginSettings fromJSON(String json) {
     return GSON.fromJson(json, PluginSettings.class);
   }
 
-  public static PluginSettings fromConfiguration(Map<String, String> pluginSettings) {
-    return GSON.fromJson(GSON.toJson(pluginSettings), PluginSettings.class);
+  public PluginSettings(String goServerUrl,
+    String autoRegisterTimeout,
+    String idleTimeout,
+    String domain,
+    String clientId,
+    String secret,
+    Period autoRegisterPeriod,
+    String networkId,
+    String subnetNames,
+    String networkSecurityGroupId,
+    String resourceGroup,
+    String sshKey,
+    String regionName,
+    String linuxUserName,
+    String windowsUserName,
+    String windowsPassword) {
+    this.goServerUrl = goServerUrl;
+    this.autoRegisterTimeout = autoRegisterTimeout;
+    this.idleTimeout = idleTimeout;
+    this.domain = domain;
+    this.clientId = clientId;
+    this.secret = secret;
+    this.autoRegisterPeriod = autoRegisterPeriod;
+    this.networkId = networkId;
+    this.subnetNames = subnetNames;
+    this.networkSecurityGroupId = networkSecurityGroupId;
+    this.resourceGroup = resourceGroup;
+    this.regionName = regionName;
+    this.linuxUserName = linuxUserName;
+    this.sshKey = sshKey;
+    this.windowsUserName = windowsUserName;
+    this.windowsPassword = windowsPassword;
+  }
+
+  public PluginSettings() {
   }
 
   @Override
@@ -82,7 +153,6 @@ public class PluginSettings {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-
     PluginSettings that = (PluginSettings) o;
 
     if (goServerUrl != null ? !goServerUrl.equals(that.goServerUrl) : that.goServerUrl != null) {
@@ -91,52 +161,52 @@ public class PluginSettings {
     if (autoRegisterTimeout != null ? !autoRegisterTimeout.equals(that.autoRegisterTimeout) : that.autoRegisterTimeout != null) {
       return false;
     }
-    if (apiUser != null ? !apiUser.equals(that.apiUser) : that.apiUser != null) {
+    if (domain != null ? !domain.equals(that.domain) : that.domain != null) {
       return false;
     }
-    if (apiKey != null ? !apiKey.equals(that.apiKey) : that.apiKey != null) {
+    if (clientId != null ? !clientId.equals(that.clientId) : that.clientId != null) {
       return false;
     }
-    return apiUrl != null ? apiUrl.equals(that.apiUrl) : that.apiUrl == null;
+    return secret != null ? secret.equals(that.secret) : that.secret == null;
   }
 
   @Override
   public int hashCode() {
-    int result = goServerUrl != null ? goServerUrl.hashCode() : 0;
-    result = 31 * result + (getAutoRegisterPeriod() != null ? getAutoRegisterPeriod().hashCode() : 0);
-    result = 31 * result + (apiUser != null ? apiUser.hashCode() : 0);
-    result = 31 * result + (apiKey != null ? apiKey.hashCode() : 0);
-    result = 31 * result + (apiUrl != null ? apiUrl.hashCode() : 0);
-    return result;
+    return Objects.hash(goServerUrl, autoRegisterTimeout, domain, clientId, secret, autoRegisterPeriod);
   }
 
   public Period getAutoRegisterPeriod() {
     if (this.autoRegisterPeriod == null) {
-      this.autoRegisterPeriod = new Period().withMinutes(Integer.parseInt(getAutoRegisterTimeout()));
+      this.autoRegisterPeriod = new Period().withMinutes(Integer.parseInt(autoRegisterTimeout));
     }
     return this.autoRegisterPeriod;
   }
 
-  private String getAutoRegisterTimeout() {
-    if (autoRegisterTimeout == null) {
-      autoRegisterTimeout = "10";
+  public Period getIdleTimeoutPeriod() {
+    if (this.idleTimeoutPeriod == null) {
+      this.idleTimeoutPeriod = new Period().withMinutes(Integer.parseInt(getIdleTimeout()));
     }
-    return autoRegisterTimeout;
+    return this.idleTimeoutPeriod;
   }
 
-  public String getApiUser() {
-    return apiUser;
+  public Region getRegion() {
+    return Region.findByLabelOrName(regionName);
   }
 
-  public String getApiKey() {
-    return apiKey;
+  public String[] getSubnetNames() {
+    if (this.subnetNamesArray == null) {
+      this.subnetNamesArray = Util.splitByComma(subnetNames);
+    }
+    return this.subnetNamesArray;
   }
 
-  public String getApiUrl() {
-    return apiUrl;
+  public String getRandomSubnet() {
+    int index = (this.getSubnetNames().length == 0) ? 0 : Util.random((getSubnetNames().length));
+    return getSubnetNames()[index];
   }
 
-  public String getGoServerUrl() {
-    return goServerUrl;
+  private String getIdleTimeout() {
+    return isBlank(idleTimeout) ? "0" : idleTimeout;
   }
+
 }

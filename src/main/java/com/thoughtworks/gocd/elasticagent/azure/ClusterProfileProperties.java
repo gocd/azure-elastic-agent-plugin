@@ -16,16 +16,8 @@
 package com.thoughtworks.gocd.elasticagent.azure;
 
 import java.util.Map;
-import org.joda.time.Period;
 
 public class ClusterProfileProperties extends PluginSettings {
-
-  public ClusterProfileProperties() {
-  }
-
-  public ClusterProfileProperties(String goServerUrl, String autoRegisterTimeout, String apiUser, String apiKey, String apiUrl, Period autoRegisterPeriod) {
-    super(goServerUrl, autoRegisterTimeout, apiUser, apiKey, apiUrl, autoRegisterPeriod);
-  }
 
   public static ClusterProfileProperties fromJSON(String json) {
     return GSON.fromJson(json, ClusterProfileProperties.class);
@@ -37,5 +29,9 @@ public class ClusterProfileProperties extends PluginSettings {
 
   public String uuid() {
     return Integer.toHexString(hashCode());
+  }
+
+  public String hash() {
+    return String.valueOf(hashCode());
   }
 }

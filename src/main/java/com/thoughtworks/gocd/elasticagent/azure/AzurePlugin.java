@@ -60,15 +60,18 @@ public class AzurePlugin implements GoPlugin {
 
   @Override
   public GoPluginApiResponse handle(GoPluginApiRequest request) throws UnhandledRequestTypeException {
+    ClusterProfileProperties clusterProfileProperties;
     try {
       switch (Request.fromString(request.requestName())) {
         case REQUEST_GET_ICON:
           return new GetPluginIconExecutor()
             .execute();
         case REQUEST_SHOULD_ASSIGN_WORK:
+          ShouldAssignWorkRequest shouldAssignWorkRequest = ShouldAssignWorkRequest.fromJSON(request.requestBody());
+          clusterProfileProperties = shouldAssignWorkRequest.getClusterProfileProperties();
           refreshInstances();
           return ShouldAssignWorkRequest.fromJSON(request.requestBody())
-            .executor(agentInstances, pluginRequest.getPluginSettings(), serverHealthMessagingService)
+            .executor(agentInstances, clusterProfileProperties, serverHealthMessagingService)
             .execute();
         case REQUEST_CREATE_AGENT:
           refreshInstances();

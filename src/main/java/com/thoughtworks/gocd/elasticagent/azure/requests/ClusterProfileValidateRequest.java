@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.thoughtworks.gocd.elasticagent.azure.requests;
 
 import com.google.gson.Gson;
@@ -22,8 +21,6 @@ import com.thoughtworks.gocd.elasticagent.azure.PluginRequest;
 import com.thoughtworks.gocd.elasticagent.azure.RequestExecutor;
 import com.thoughtworks.gocd.elasticagent.azure.client.GoCDAzureClientFactory;
 import com.thoughtworks.gocd.elasticagent.azure.executors.ClusterProfileValidateRequestExecutor;
-import com.thoughtworks.gocd.elasticagent.azure.validations.Validation;
-
 import java.util.Map;
 
 public class ClusterProfileValidateRequest {
@@ -35,7 +32,6 @@ public class ClusterProfileValidateRequest {
     this.properties = properties;
   }
 
-
   public Map<String, String> getProperties() {
     return properties;
   }
@@ -46,6 +42,6 @@ public class ClusterProfileValidateRequest {
   }
 
   public RequestExecutor executor(PluginRequest pluginRequest, GoCDAzureClientFactory factory) {
-    return new ClusterProfileValidateRequestExecutor(this, pluginRequest, factory, Validation.ELASTIC_PROFILE_VALIDATIONS);
+    return new ClusterProfileValidateRequestExecutor(this);
   }
 }

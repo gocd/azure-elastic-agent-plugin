@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.thoughtworks.gocd.elasticagent.azure.client;
 
 import com.microsoft.azure.AzureEnvironment;
@@ -21,7 +20,6 @@ import com.microsoft.azure.credentials.ApplicationTokenCredentials;
 import com.microsoft.azure.management.Azure;
 import com.microsoft.rest.LogLevel;
 import com.thoughtworks.gocd.elasticagent.azure.PluginSettings;
-
 import java.io.IOException;
 
 public class GoCDAzureClientFactory {
@@ -37,14 +35,14 @@ public class GoCDAzureClientFactory {
 
   protected GoCDAzureClient createClient(String clientId, String domain, String secret, String resourceGroup, String subscriptionID) {
     ApplicationTokenCredentials credentials = new ApplicationTokenCredentials(clientId,
-        domain,
-        secret,
-        AzureEnvironment.AZURE);
+      domain,
+      secret,
+      AzureEnvironment.AZURE);
 
     Azure azure = Azure.configure()
-        .withLogLevel(LogLevel.BASIC)
-        .authenticate(credentials)
-        .withSubscription(subscriptionID);
+      .withLogLevel(LogLevel.BASIC)
+      .authenticate(credentials)
+      .withSubscription(subscriptionID);
     return new GoCDAzureClient(azure, resourceGroup, new NetworkDecorator(azure));
   }
 }

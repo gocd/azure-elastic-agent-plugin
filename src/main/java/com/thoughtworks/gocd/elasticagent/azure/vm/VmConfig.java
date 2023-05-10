@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.thoughtworks.gocd.elasticagent.azure.vm;
 
 import com.microsoft.azure.management.compute.ImageReference;
@@ -21,23 +20,21 @@ import com.microsoft.azure.management.compute.StorageAccountTypes;
 import com.microsoft.azure.management.compute.VirtualMachineSizeTypes;
 import com.microsoft.azure.management.resources.fluentcore.arm.Region;
 import com.thoughtworks.gocd.elasticagent.azure.AgentConfig;
+import static com.thoughtworks.gocd.elasticagent.azure.Constants.DEFAULT_GO_SERVER_VERSION;
 import com.thoughtworks.gocd.elasticagent.azure.PluginSettings;
 import com.thoughtworks.gocd.elasticagent.azure.models.ElasticProfile;
 import com.thoughtworks.gocd.elasticagent.azure.models.JobIdentifier;
 import com.thoughtworks.gocd.elasticagent.azure.models.Platform;
+import static com.thoughtworks.gocd.elasticagent.azure.models.Platform.LINUX;
 import com.thoughtworks.gocd.elasticagent.azure.models.ServerInfo;
 import com.thoughtworks.gocd.elasticagent.azure.requests.CreateAgentRequest;
-import lombok.Getter;
-import org.apache.commons.lang3.StringUtils;
-
+import static com.thoughtworks.gocd.elasticagent.azure.utils.Util.uniqueString;
+import static com.thoughtworks.gocd.elasticagent.azure.vm.VMTags.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-
-import static com.thoughtworks.gocd.elasticagent.azure.Constants.DEFAULT_GO_SERVER_VERSION;
-import static com.thoughtworks.gocd.elasticagent.azure.models.Platform.LINUX;
-import static com.thoughtworks.gocd.elasticagent.azure.utils.Util.uniqueString;
-import static com.thoughtworks.gocd.elasticagent.azure.vm.VMTags.*;
+import lombok.Getter;
+import org.apache.commons.lang3.StringUtils;
 
 @Getter
 public class VmConfig {
@@ -69,26 +66,26 @@ public class VmConfig {
     String imageReferenceString = "";
     if (imageReference != null) {
       imageReferenceString = String.format("{publisher:%s,offer:%s,sku:%s,version:%s}",
-          imageReference.publisher(),
-          imageReference.offer(),
-          imageReference.sku(),
-          imageReference.version());
+        imageReference.publisher(),
+        imageReference.offer(),
+        imageReference.sku(),
+        imageReference.version());
     }
-    return "VmConfig{" +
-        "agentConfig=" + agentConfig +
-        ", region=" + region +
-        ", resourceGroup='" + resourceGroup + '\'' +
-        ", networkId='" + networkId + '\'' +
-        ", UserName='" + userName + '\'' +
-        ", subnet='" + subnet + '\'' +
-        ", name='" + name + '\'' +
-        ", size='" + size + '\'' +
-        ", osDiskStorageAccountType='" + osDiskStorageAccountType + '\'' +
-        ", osDiskSize='" + (osDiskSize.isPresent() ? osDiskSize.get() : "") + '\'' +
-        ", customImageId=" + customImageId +
-        ", imageReference=" + imageReferenceString +
-        ", tags=" + tags +
-        '}';
+    return "VmConfig{"
+      + "agentConfig=" + agentConfig
+      + ", region=" + region
+      + ", resourceGroup='" + resourceGroup + '\''
+      + ", networkId='" + networkId + '\''
+      + ", UserName='" + userName + '\''
+      + ", subnet='" + subnet + '\''
+      + ", name='" + name + '\''
+      + ", size='" + size + '\''
+      + ", osDiskStorageAccountType='" + osDiskStorageAccountType + '\''
+      + ", osDiskSize='" + (osDiskSize.isPresent() ? osDiskSize.get() : "") + '\''
+      + ", customImageId=" + customImageId
+      + ", imageReference=" + imageReferenceString
+      + ", tags=" + tags
+      + '}';
   }
 
   // ToDo: Find server version, check vm name limit, How to specify Custom image id ?
@@ -96,7 +93,7 @@ public class VmConfig {
     this.name = uniqueString(VM_NAME_PREFIX);
     this.environment = builder.environment;
     this.agentConfig = new AgentConfig(builder.goServerUrl, builder.autoregisterKey, builder.serverVersion,
-        this.environment, this.name);
+      this.environment, this.name);
     this.region = builder.region;
     this.resourceGroup = builder.resourceGroup;
     this.networkId = builder.networkId;
@@ -162,7 +159,7 @@ public class VmConfig {
 
       this.environment = Optional.ofNullable(request.environment()).orElse("");
       this.autoregisterKey = request.autoRegisterKey();
-      ElasticProfile elasticProfile = request.elasticProfile();
+      ElasticProfile elasticProfile = new ElasticProfile(request.properties());
       this.subnet = getSubnetName(elasticProfile);
       this.size = getSize(elasticProfile);
       this.imageReference = getImageReference(elasticProfile);
@@ -175,10 +172,9 @@ public class VmConfig {
       //overrides
       this.userName = LINUX.equals(platform) ? settings.getLinuxUserName() : settings.getWindowsUserName();
 
-
       tags.put(ENVIRONMENT_TAG_KEY, environment);
       if (elasticProfile != null) {
-        tags.put(ELASTIC_PROFILE_TAG_KEY, request.elasticProfile().hash());
+        tags.put(ELASTIC_PROFILE_TAG_KEY, request.getClusterProfileProperties().hash());
       }
       tags.put(IDLE_TIMEOUT, String.format("%s", getEffectiveIdleTimeoutPeriodInMins(elasticProfile, settings)));
       return new VmConfig(this);
@@ -186,20 +182,20 @@ public class VmConfig {
 
     private String getSubnetName(ElasticProfile elasticProfile) {
       return Optional.ofNullable(elasticProfile)
-          .flatMap(ElasticProfile::getSubnetName)
-          .orElse(settings.getRandomSubnet());
+        .flatMap(ElasticProfile::getSubnetName)
+        .orElse(settings.getRandomSubnet());
     }
 
     private Optional<Integer> getOsDiskSize(ElasticProfile elasticProfile) {
       return Optional.ofNullable(elasticProfile)
-          .map(ElasticProfile::getOsDiskSize)
-          .orElse(Optional.empty());
+        .map(ElasticProfile::getOsDiskSize)
+        .orElse(Optional.empty());
     }
 
     private StorageAccountTypes getOSDiskStorageAccountType(ElasticProfile elasticProfile) {
       return Optional.ofNullable(elasticProfile)
-          .map(ElasticProfile::getOsDiskStorageAccountType)
-          .orElse(StorageAccountTypes.STANDARD_SSD_LRS);
+        .map(ElasticProfile::getOsDiskStorageAccountType)
+        .orElse(StorageAccountTypes.STANDARD_SSD_LRS);
     }
 
     public Builder setRequestParams(CreateAgentRequest request) {
@@ -220,41 +216,41 @@ public class VmConfig {
 
     private int getEffectiveIdleTimeoutPeriodInMins(ElasticProfile elasticProfile, PluginSettings settings) {
       return Optional.ofNullable(elasticProfile)
-          .map(ElasticProfile::getIdleTimeoutPeriod)
-          .orElse(settings.getIdleTimeoutPeriod())
-          .getMinutes();
+        .map(ElasticProfile::getIdleTimeoutPeriod)
+        .orElse(settings.getIdleTimeoutPeriod())
+        .getMinutes();
     }
 
-    private String getCustomImageId(ElasticProfile elasticProfile){
+    private String getCustomImageId(ElasticProfile elasticProfile) {
       return Optional.ofNullable(elasticProfile)
-          .map(ElasticProfile::getVmCustomImageId)
-          .orElse("");
+        .map(ElasticProfile::getVmCustomImageId)
+        .orElse("");
     }
 
     private Platform getPlatform(ElasticProfile elasticProfile) {
       return Optional.ofNullable(elasticProfile)
-          .map(profile -> Optional.ofNullable(profile.getPlatform()).orElse(LINUX))
-          .orElse(LINUX);
+        .map(profile -> Optional.ofNullable(profile.getPlatform()).orElse(LINUX))
+        .orElse(LINUX);
     }
 
     private String getCustomScript(ElasticProfile elasticProfile) {
       return Optional.ofNullable(elasticProfile)
-          .map(profile -> StringUtils.defaultIfEmpty(profile.getCustomScript(), "").trim())
-          .orElse("");
+        .map(profile -> StringUtils.defaultIfEmpty(profile.getCustomScript(), "").trim())
+        .orElse("");
     }
 
     private String getSize(ElasticProfile elasticProfile) {
       return Optional.ofNullable(elasticProfile)
-          .map(ElasticProfile::getVmSize)
-          .filter(s -> !s.isEmpty())
-          .orElse(VirtualMachineSizeTypes.STANDARD_D3_V2.toString());
+        .map(ElasticProfile::getVmSize)
+        .filter(s -> !s.isEmpty())
+        .orElse(VirtualMachineSizeTypes.STANDARD_D3_V2.toString());
     }
 
     private ImageReference getImageReference(ElasticProfile elasticProfile) {
       try {
         return Optional.ofNullable(elasticProfile)
-            .map(ElasticProfile::getImageReference)
-            .orElse(null);
+          .map(ElasticProfile::getImageReference)
+          .orElse(null);
       } catch (IllegalArgumentException e) {
         return null;
       }

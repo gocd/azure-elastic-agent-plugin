@@ -36,6 +36,10 @@ gocdPlugin {
 
   prerelease = !"No".equalsIgnoreCase(System.getenv('PRERELEASE'))
   assetsToRelease = [project.tasks.findByName('jar')]
+
+  licenseReport {
+    excludes = ['com.google.guava:guava-parent']
+  }
 }
 
 version = gocdPlugin.fullVersion(project)
@@ -64,12 +68,26 @@ dependencies {
   compileOnly project.deps.gocdPluginApi
 
   implementation group: 'com.google.code.gson', name: 'gson', version: '2.10.1'
-  implementation group: 'com.google.guava', name: 'guava', version: '32.0.1-jre'
+  implementation group: 'com.google.guava', name: 'guava', version: '32.1.0-jre'
   implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
   implementation group: 'joda-time', name: 'joda-time', version: '2.12.5'
 
   implementation group: 'com.microsoft.azure', name: 'azure', version: '1.41.4'
   implementation group: 'org.freemarker', name: 'freemarker', version: '2.3.32'
+
+  components {
+    // workaround for Guava metadata declaring dependencies that are not needed at runtime
+    // see https://github.com/google/guava/pull/6606
+    withModule('com.google.guava:guava', { details ->
+      details.allVariants {
+        withDependencies {
+          removeAll {
+            it.group in [ "com.google.code.findbugs", "org.checkerframework", "com.google.errorprone" ]
+          }
+        }
+      }
+    })
+  }
 
   testImplementation platform('org.junit:junit-bom:5.9.3')
   testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api'

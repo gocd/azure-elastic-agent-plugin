@@ -59,7 +59,7 @@ repositories {
 
 ext {
   deps = [
-      gocdPluginApi: 'cd.go.plugin:go-plugin-api:23.2.0',
+      gocdPluginApi: 'cd.go.plugin:go-plugin-api:23.3.0',
       lombok       : 'org.projectlombok:lombok:1.18.28',
   ]
 

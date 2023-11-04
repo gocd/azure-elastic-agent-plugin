@@ -38,10 +38,6 @@ gocdPlugin {
 
   prerelease = !"No".equalsIgnoreCase(System.getenv('PRERELEASE'))
   assetsToRelease = [project.tasks.findByName('jar')]
-
-  licenseReport {
-    excludes = ['com.google.guava:guava-parent']
-  }
 }
 
 version = gocdPlugin.fullVersion(project)
@@ -59,8 +55,8 @@ repositories {
 
 ext {
   deps = [
-      gocdPluginApi: 'cd.go.plugin:go-plugin-api:23.3.0',
-      lombok       : 'org.projectlombok:lombok:1.18.28',
+      gocdPluginApi: 'cd.go.plugin:go-plugin-api:23.4.0',
+      lombok       : 'org.projectlombok:lombok:1.18.30',
   ]
 
   versions = project.ext.deps.collectEntries { lib, libGav -> [lib, libGav.split(':').last()] }
@@ -73,7 +69,7 @@ dependencies {
   compileOnly project.deps.gocdPluginApi
 
   implementation group: 'com.google.code.gson', name: 'gson', version: '2.10.1'
-  implementation group: 'com.google.guava', name: 'guava', version: '32.1.2-jre'
+  implementation group: 'com.google.guava', name: 'guava', version: '32.1.3-jre'
   implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.13.0'
   implementation group: 'joda-time', name: 'joda-time', version: '2.12.5'
 
@@ -102,7 +98,7 @@ dependencies {
 
   testImplementation project.deps.gocdPluginApi
   testImplementation group: 'org.hamcrest', name: 'hamcrest', version: '2.2'
-  testImplementation platform('org.mockito:mockito-bom:5.5.0')
+  testImplementation platform('org.mockito:mockito-bom:5.7.0')
   testImplementation group: 'org.mockito', name: 'mockito-core'
   testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter'
   testImplementation group: 'org.skyscreamer', name: 'jsonassert', version: '1.5.1'

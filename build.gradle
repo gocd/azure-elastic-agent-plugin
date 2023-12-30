@@ -21,7 +21,7 @@ apply from: "https://raw.githubusercontent.com/gocd/gocd-plugin-gradle-task-help
 
 gocdPlugin {
   id = 'com.thoughtworks.gocd.elastic-agent.azure'
-  pluginVersion = '1.2.1'
+  pluginVersion = '1.2.2'
   goCdVersion = '21.4.0'
   name = 'GoCD Elastic Agent Plugin for Azure'
   description = 'GoCD Elastic Agent Plugin for Azure allows efficient usage of Azure instances'
@@ -73,7 +73,14 @@ dependencies {
   implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.14.0'
   implementation group: 'joda-time', name: 'joda-time', version: '2.12.6'
 
+  platform(implementation('com.fasterxml.jackson:jackson-bom:2.16.1'))
   implementation group: 'com.microsoft.azure', name: 'azure', version: '1.41.4'
+
+  constraints {
+    implementation('com.nimbusds:oauth2-oidc-sdk:9.43.3') {
+      because 'Azure SDK 1.x uses an older version with vulnerable dependencies'
+    }
+  }
   implementation group: 'org.freemarker', name: 'freemarker', version: '2.3.32'
 
   components {

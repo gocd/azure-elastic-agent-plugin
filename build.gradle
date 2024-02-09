@@ -77,7 +77,7 @@ dependencies {
   implementation group: 'com.microsoft.azure', name: 'azure', version: '1.41.4'
 
   constraints {
-    implementation('com.nimbusds:oauth2-oidc-sdk:9.43.3') {
+    implementation('com.nimbusds:oauth2-oidc-sdk:10.15') {
       because 'Azure SDK 1.x uses an older version with vulnerable dependencies'
     }
   }

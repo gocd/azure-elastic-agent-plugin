@@ -84,7 +84,7 @@ dependencies {
     implementation('com.squareup.retrofit2:retrofit:2.11.0') {
       because 'Azure SDK 1.x uses an older version with vulnerable dependencies'
     }
-    implementation('com.squareup.okio:okio:1.17.6') {
+    implementation('com.squareup.okio:okio:2.10.0') {
       because 'Retrofit via Azure SDK uses an older version with vulnerable dependencies'
     }
   }

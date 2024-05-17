@@ -80,6 +80,13 @@ dependencies {
     implementation('com.nimbusds:oauth2-oidc-sdk:9.43.4') {
       because 'Azure SDK 1.x uses an older version with vulnerable dependencies'
     }
+    // Force upgrade transitive dependencies of fabric client to versions without vulnerabilities
+    implementation('com.squareup.retrofit2:retrofit:2.11.0') {
+      because 'Azure SDK 1.x uses an older version with vulnerable dependencies'
+    }
+    implementation('com.squareup.okio:okio:1.17.6') {
+      because 'Retrofit via Azure SDK uses an older version with vulnerable dependencies'
+    }
   }
   implementation group: 'org.freemarker', name: 'freemarker', version: '2.3.32'
 

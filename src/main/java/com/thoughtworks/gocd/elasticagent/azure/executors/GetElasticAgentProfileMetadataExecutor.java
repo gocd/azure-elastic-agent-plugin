@@ -26,7 +26,7 @@ import com.thoughtworks.gocd.elasticagent.azure.models.ElasticProfile;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GetProfileMetadataExecutor implements RequestExecutor {
+public class GetElasticAgentProfileMetadataExecutor implements RequestExecutor {
   private static final Gson GSON = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 
   public static final Metadata IDLE_TIMEOUT = new NonNegativeIntegerMetadata(ElasticProfile.IDLE_TIMEOUT, false, false);

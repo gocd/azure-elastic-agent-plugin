@@ -13,27 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.thoughtworks.gocd.elasticagent.azure;
 
 import com.microsoft.azure.management.compute.ImageReference;
 import com.thoughtworks.gocd.elasticagent.azure.models.ElasticProfile;
 import com.thoughtworks.gocd.elasticagent.azure.models.JobIdentifier;
 import com.thoughtworks.gocd.elasticagent.azure.models.Platform;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import org.joda.time.DateTime;
-
+import static com.thoughtworks.gocd.elasticagent.azure.vm.VMTags.*;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-
-import static com.thoughtworks.gocd.elasticagent.azure.vm.VMTags.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import org.joda.time.DateTime;
 
 @Getter
 @EqualsAndHashCode
 public class AzureInstance {
+
   private String name;
   private String hostName;
   private String id;
@@ -50,18 +48,18 @@ public class AzureInstance {
   private Platform platform;
 
   public AzureInstance(String name,
-                       String hostName,
-                       String id,
-                       DateTime createdAt,
-                       ImageReference imageReference,
-                       String size,
-                       String os,
-                       Integer diskSize,
-                       String provisioningState,
-                       String powerState,
-                       String resourceGroupName,
-                       String primaryNetworkInterface,
-                       Map<String, String> tags, Platform platform) {
+    String hostName,
+    String id,
+    DateTime createdAt,
+    ImageReference imageReference,
+    String size,
+    String os,
+    Integer diskSize,
+    String provisioningState,
+    String powerState,
+    String resourceGroupName,
+    String primaryNetworkInterface,
+    Map<String, String> tags, Platform platform) {
     this.name = name;
     this.hostName = hostName;
     this.id = id;
@@ -82,7 +80,7 @@ public class AzureInstance {
     return getJobIdentifierHash().equals(identifier.hash());
   }
 
-  public Boolean elasticProfileMatches(ElasticProfile elasticProfile){
+  public Boolean elasticProfileMatches(ElasticProfile elasticProfile) {
     return getElasticProfileHash().equals(elasticProfile.hash());
   }
 
@@ -98,8 +96,8 @@ public class AzureInstance {
     return isAssigned() ? JobState.Assigned : JobState.Unassigned;
   }
 
-  public boolean canBeAssigned(ElasticProfile elasticProfile) {
-    return getElasticProfileHash().equals(elasticProfile.hash()) && !isAssigned() && (neverAssigned() || !isIdleAfterIdleTimeout());
+  public boolean canBeAssigned(ClusterProfileProperties clusterProfileProperties) {
+    return getElasticProfileHash().equals(clusterProfileProperties.hash()) && !isAssigned() && (neverAssigned() || !isIdleAfterIdleTimeout());
   }
 
   public boolean isIdleAfterIdleTimeout() {
@@ -130,14 +128,14 @@ public class AzureInstance {
     return Optional.ofNullable(this.tags.get(JOB_IDENTIFIER_TAG_KEY)).orElse(String.valueOf(UUID.randomUUID()));
   }
 
-  private int getIdleTimeout(){
+  private int getIdleTimeout() {
     String idleTimeout = this.tags.get(IDLE_TIMEOUT);
     return idleTimeout != null ? Integer.valueOf(idleTimeout) : 0;
   }
 
-  private DateTime idleSince(){
+  private DateTime idleSince() {
     DateTime lastJobRunTime = getLastJobRunTime();
-    return lastJobRunTime !=null ? lastJobRunTime : createdAt;
+    return lastJobRunTime != null ? lastJobRunTime : createdAt;
   }
 
   public enum JobState {

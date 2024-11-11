@@ -21,7 +21,7 @@ apply from: "https://raw.githubusercontent.com/gocd/gocd-plugin-gradle-task-help
 
 gocdPlugin {
   id = 'com.thoughtworks.gocd.elastic-agent.azure'
-  pluginVersion = '1.2.1'
+  pluginVersion = '1.2.2'
   goCdVersion = '21.4.0'
   name = 'GoCD Elastic Agent Plugin for Azure'
   description = 'GoCD Elastic Agent Plugin for Azure allows efficient usage of Azure instances'
@@ -55,8 +55,8 @@ repositories {
 
 ext {
   deps = [
-      gocdPluginApi: 'cd.go.plugin:go-plugin-api:23.4.0',
-      lombok       : 'org.projectlombok:lombok:1.18.30',
+      gocdPluginApi: 'cd.go.plugin:go-plugin-api:24.4.0',
+      lombok       : 'org.projectlombok:lombok:1.18.34',
   ]
 
   versions = project.ext.deps.collectEntries { lib, libGav -> [lib, libGav.split(':').last()] }
@@ -68,13 +68,27 @@ dependencies {
   compileOnly project.deps.lombok
   compileOnly project.deps.gocdPluginApi
 
-  implementation group: 'com.google.code.gson', name: 'gson', version: '2.10.1'
-  implementation group: 'com.google.guava', name: 'guava', version: '32.1.3-jre'
-  implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.13.0'
-  implementation group: 'joda-time', name: 'joda-time', version: '2.12.5'
+  implementation group: 'com.google.code.gson', name: 'gson', version: '2.11.0'
+  implementation group: 'com.google.guava', name: 'guava', version: '33.3.1-jre'
+  implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.17.0'
+  implementation group: 'joda-time', name: 'joda-time', version: '2.13.0'
 
+  platform(implementation('com.fasterxml.jackson:jackson-bom:2.18.1'))
   implementation group: 'com.microsoft.azure', name: 'azure', version: '1.41.4'
-  implementation group: 'org.freemarker', name: 'freemarker', version: '2.3.32'
+
+  constraints {
+    implementation('com.nimbusds:oauth2-oidc-sdk:9.43.4') {
+      because 'Azure SDK 1.x uses an older version with vulnerable dependencies'
+    }
+    // Force upgrade transitive dependencies of fabric client to versions without vulnerabilities
+    implementation('com.squareup.retrofit2:retrofit:2.11.0') {
+      because 'Azure SDK 1.x uses an older version with vulnerable dependencies'
+    }
+    implementation('com.squareup.okio:okio:1.17.6') {
+      because 'Retrofit via Azure SDK uses an older version with vulnerable dependencies'
+    }
+  }
+  implementation group: 'org.freemarker', name: 'freemarker', version: '2.3.33'
 
   components {
     // workaround for Guava metadata declaring dependencies that are not needed at runtime
@@ -83,25 +97,25 @@ dependencies {
       details.allVariants {
         withDependencies {
           removeAll {
-            it.name in [ "jsr305", "checker-qual", "error_prone_annotations", "listenablefuture" ]
+            it.name in [ "jsr305", "checker-qual", "error_prone_annotations", "listenablefuture", "j2objc-annotations" ]
           }
         }
       }
     })
   }
 
-  testImplementation platform('org.junit:junit-bom:5.10.0')
+  testImplementation platform('org.junit:junit-bom:5.11.3')
   testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api'
   testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params'
   testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine'
   testRuntimeOnly group: 'org.junit.platform', name: 'junit-platform-launcher'
 
   testImplementation project.deps.gocdPluginApi
-  testImplementation group: 'org.hamcrest', name: 'hamcrest', version: '2.2'
-  testImplementation platform('org.mockito:mockito-bom:5.7.0')
+  testImplementation group: 'org.hamcrest', name: 'hamcrest', version: '3.0'
+  testImplementation platform('org.mockito:mockito-bom:5.14.2')
   testImplementation group: 'org.mockito', name: 'mockito-core'
   testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter'
-  testImplementation group: 'org.skyscreamer', name: 'jsonassert', version: '1.5.1'
+  testImplementation group: 'org.skyscreamer', name: 'jsonassert', version: '1.5.3'
 }
 
 test {

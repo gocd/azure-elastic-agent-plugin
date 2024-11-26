@@ -13,34 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.thoughtworks.gocd.elasticagent.azure.executors;
 
 import com.thoughtworks.go.plugin.api.response.DefaultGoPluginApiResponse;
 import com.thoughtworks.go.plugin.api.response.GoPluginApiResponse;
 import com.thoughtworks.gocd.elasticagent.azure.*;
+import static com.thoughtworks.gocd.elasticagent.azure.AzurePlugin.LOG;
 import com.thoughtworks.gocd.elasticagent.azure.requests.JobCompletionRequest;
-
+import static com.thoughtworks.gocd.elasticagent.azure.vm.VMTags.JOB_IDENTIFIER_TAG_KEY;
+import static com.thoughtworks.gocd.elasticagent.azure.vm.VMTags.LAST_JOB_RUN_TAG_KEY;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
-import static com.thoughtworks.gocd.elasticagent.azure.AzurePlugin.LOG;
-import static com.thoughtworks.gocd.elasticagent.azure.vm.VMTags.JOB_IDENTIFIER_TAG_KEY;
-import static com.thoughtworks.gocd.elasticagent.azure.vm.VMTags.LAST_JOB_RUN_TAG_KEY;
-
-
 public class JobCompletionRequestExecutor implements RequestExecutor {
+
   private final JobCompletionRequest jobCompletionRequest;
   private final AzureAgentInstances agentInstances;
   private final PluginRequest pluginRequest;
   private Clock clock;
 
-
   public JobCompletionRequestExecutor(JobCompletionRequest jobCompletionRequest,
-                                      AzureAgentInstances agentInstances,
-                                      PluginRequest pluginRequest,
-                                      Clock clock) {
+    AzureAgentInstances agentInstances,
+    PluginRequest pluginRequest,
+    Clock clock) {
     this.jobCompletionRequest = jobCompletionRequest;
     this.agentInstances = agentInstances;
     this.pluginRequest = pluginRequest;
@@ -49,7 +45,7 @@ public class JobCompletionRequestExecutor implements RequestExecutor {
 
   @Override
   public GoPluginApiResponse execute() throws Exception {
-    PluginSettings pluginSettings = pluginRequest.getPluginSettings();
+    PluginSettings pluginSettings = jobCompletionRequest.getClusterProfileProperties();
     String elasticAgentId = jobCompletionRequest.getElasticAgentId();
     Agent agent = new Agent(elasticAgentId);
     Agents agents = pluginRequest.listAgents();

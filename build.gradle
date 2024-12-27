@@ -88,7 +88,7 @@ dependencies {
       because 'Retrofit via Azure SDK uses an older version with vulnerable dependencies'
     }
   }
-  implementation group: 'org.freemarker', name: 'freemarker', version: '2.3.33'
+  implementation group: 'org.freemarker', name: 'freemarker', version: '2.3.34'
 
   components {
     // workaround for Guava metadata declaring dependencies that are not needed at runtime

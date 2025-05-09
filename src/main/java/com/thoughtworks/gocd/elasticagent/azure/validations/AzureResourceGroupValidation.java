@@ -24,7 +24,7 @@ import java.util.Collections;
 import java.util.Map;
 
 import static com.thoughtworks.gocd.elasticagent.azure.AzurePlugin.LOG;
-import static com.thoughtworks.gocd.elasticagent.azure.executors.GetPluginConfigurationExecutor.RESOURCE_GROUP;
+import static com.thoughtworks.gocd.elasticagent.azure.executors.GetClusterProfileMetadataExecutor.RESOURCE_GROUP;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class AzureResourceGroupValidation implements Validation {

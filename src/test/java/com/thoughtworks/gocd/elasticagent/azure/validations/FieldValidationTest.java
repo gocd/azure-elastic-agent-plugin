@@ -21,7 +21,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Collections;
 import java.util.Map;
 
-import static com.thoughtworks.gocd.elasticagent.azure.executors.GetPluginConfigurationExecutor.*;
+import static com.thoughtworks.gocd.elasticagent.azure.executors.GetClusterProfileMetadataExecutor.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class FieldValidationTest {

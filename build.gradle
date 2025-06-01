@@ -81,7 +81,7 @@ dependencies {
       because 'Azure SDK 1.x uses an older version with vulnerable dependencies'
     }
     // Force upgrade transitive dependencies of fabric client to versions without vulnerabilities
-    implementation('com.squareup.retrofit2:retrofit:2.11.0') {
+    implementation('com.squareup.retrofit2:retrofit:3.0.0') {
       because 'Azure SDK 1.x uses an older version with vulnerable dependencies'
     }
     implementation('com.squareup.okio:okio:1.17.6') {
@@ -104,7 +104,7 @@ dependencies {
     })
   }
 
-  testImplementation platform('org.junit:junit-bom:5.12.2')
+  testImplementation platform('org.junit:junit-bom:5.13.0')
   testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api'
   testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params'
   testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine'
@@ -112,7 +112,7 @@ dependencies {
 
   testImplementation project.deps.gocdPluginApi
   testImplementation group: 'org.hamcrest', name: 'hamcrest', version: '3.0'
-  testImplementation platform('org.mockito:mockito-bom:5.17.0')
+  testImplementation platform('org.mockito:mockito-bom:5.18.0')
   testImplementation group: 'org.mockito', name: 'mockito-core'
   testImplementation group: 'org.mockito', name: 'mockito-junit-jupiter'
   testImplementation group: 'org.skyscreamer', name: 'jsonassert', version: '1.5.3'

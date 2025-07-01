@@ -73,7 +73,7 @@ dependencies {
   implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.17.0'
   implementation group: 'joda-time', name: 'joda-time', version: '2.14.0'
 
-  platform(implementation('com.fasterxml.jackson:jackson-bom:2.19.0'))
+  platform(implementation('com.fasterxml.jackson:jackson-bom:2.19.1'))
   implementation group: 'com.microsoft.azure', name: 'azure', version: '1.41.4'
 
   constraints {
@@ -104,7 +104,7 @@ dependencies {
     })
   }
 
-  testImplementation platform('org.junit:junit-bom:5.13.0')
+  testImplementation platform('org.junit:junit-bom:5.13.2')
   testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api'
   testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-params'
   testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine'

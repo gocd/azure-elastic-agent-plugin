@@ -23,7 +23,7 @@ import java.util.Collections;
 import java.util.Map;
 
 import static com.thoughtworks.gocd.elasticagent.azure.Errors.AZURE_INVALID_REGION;
-import static com.thoughtworks.gocd.elasticagent.azure.executors.GetPluginConfigurationExecutor.REGION_NAME;
+import static com.thoughtworks.gocd.elasticagent.azure.executors.GetClusterProfileMetadataExecutor.REGION_NAME;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class AzureRegionValidation implements Validation {

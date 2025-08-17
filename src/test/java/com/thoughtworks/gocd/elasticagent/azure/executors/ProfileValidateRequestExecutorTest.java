@@ -22,7 +22,7 @@ import com.thoughtworks.gocd.elasticagent.azure.PluginSettings;
 import com.thoughtworks.gocd.elasticagent.azure.client.GoCDAzureClient;
 import com.thoughtworks.gocd.elasticagent.azure.client.GoCDAzureClientFactory;
 import com.thoughtworks.gocd.elasticagent.azure.exceptions.PluginSettingsNotConfiguredException;
-import com.thoughtworks.gocd.elasticagent.azure.requests.ProfileValidateRequest;
+import com.thoughtworks.gocd.elasticagent.azure.requests.ClusterProfileValidateRequest;
 import com.thoughtworks.gocd.elasticagent.azure.validations.Validation;
 import org.json.JSONException;
 import org.junit.jupiter.api.BeforeEach;
@@ -64,7 +64,7 @@ class ProfileValidateRequestExecutorTest {
   void shouldShowErrorOnAllFieldsIfPluginSettingsNotConfigured() throws Exception {
     when(mockPluginRequest.getPluginSettings()).thenThrow(PluginSettingsNotConfiguredException.class);
 
-    ProfileValidateRequestExecutor executor = new ProfileValidateRequestExecutor(new ProfileValidateRequest(Collections.emptyMap()), mockPluginRequest, mockClientFactory, Collections.emptyList());
+    ClusterProfileValidateRequestExecutor executor = new ClusterProfileValidateRequestExecutor(new ClusterProfileValidateRequest(Collections.emptyMap()), mockPluginRequest, mockClientFactory, Collections.emptyList());
     String json = executor.execute().responseBody();
 
     JSONAssert.assertEquals("[" +
@@ -85,7 +85,7 @@ class ProfileValidateRequestExecutorTest {
     Validation validation2 = mock(Validation.class);
     List<Validation> validations = Arrays.asList(validation1, validation2);
     Map<String, String> properties = Collections.emptyMap();
-    ProfileValidateRequestExecutor executor = new ProfileValidateRequestExecutor(new ProfileValidateRequest(properties), mockPluginRequest, mockClientFactory, validations);
+    ClusterProfileValidateRequestExecutor executor = new ClusterProfileValidateRequestExecutor(new ClusterProfileValidateRequest(properties), mockPluginRequest, mockClientFactory, validations);
     when(validation1.run(properties, mockPluginSettings, mockAzureClient)).thenReturn(Collections.emptyMap());
     when(validation2.run(properties, mockPluginSettings, mockAzureClient)).thenReturn(Collections.singletonMap("field key", "error message"));
 

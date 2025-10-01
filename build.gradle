@@ -21,8 +21,8 @@ apply from: "https://raw.githubusercontent.com/gocd/gocd-plugin-gradle-task-help
 
 gocdPlugin {
   id = 'com.thoughtworks.gocd.elastic-agent.azure'
-  pluginVersion = '1.2.2'
-  goCdVersion = '21.4.0'
+  pluginVersion = '2.0.0'
+  goCdVersion = '22.1.0'
   name = 'GoCD Elastic Agent Plugin for Azure'
   description = 'GoCD Elastic Agent Plugin for Azure allows efficient usage of Azure instances'
   vendorName = 'Thoughtworks, Inc.'
@@ -42,8 +42,13 @@ gocdPlugin {
 
 version = gocdPlugin.fullVersion(project)
 
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
 tasks.withType(JavaCompile).configureEach {
-    options.release = 11
+    options.release = 17
 }
 
 // In this section you declare where to find the dependencies of your project

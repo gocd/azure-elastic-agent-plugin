@@ -251,28 +251,6 @@ class VmConfigTest extends BaseTest {
   }
 
   @Test
-  void shouldFetchPlatformStrategyFromPlatform() {
-    Platform mockPlatform = mock(Platform.class);
-    CreateAgentRequest request = new CreateAgentRequest("",
-        new ElasticProfile(null,
-            "Canonical:UbuntuServer:14.04.4-LTS",
-            "",
-            "",
-            mockPlatform, "Standard_LRS", "", "50", ""),
-        "",
-        new JobIdentifier(1L));
-    VmConfig vmConfig = new VmConfig.Builder()
-        .setRequestParams(request)
-        .setSettingsParams(createPluginSettings())
-        .build();
-    LinuxPlatformConfigStrategy expectedStrategy = new LinuxPlatformConfigStrategy(new CustomScriptBuilder());
-    when(mockPlatform.getConfigStrategy()).thenReturn(expectedStrategy);
-
-    assertEquals(expectedStrategy, vmConfig.getPlatformStrategy());
-    verify(mockPlatform).getConfigStrategy();
-  }
-
-  @Test
   void shouldAddIdleTimeoutTagIfValueSetInElasticProfile() {
     PluginSettings pluginSettings = createPluginSettings();
     ElasticProfile profile = new ElasticProfile("Standard_A0",

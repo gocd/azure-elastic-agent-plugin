@@ -27,7 +27,7 @@ import com.thoughtworks.gocd.elasticagent.azure.models.*;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class GetPluginConfigurationExecutor implements RequestExecutor {
+public class GetClusterProfileMetadataExecutor implements RequestExecutor {
 
   private static final Gson GSON = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create();
 
@@ -51,31 +51,31 @@ public class GetPluginConfigurationExecutor implements RequestExecutor {
   public static final Field WINDOWS_USER_NAME = new WindowsUsernameField("windows_user_name", "Windows User Name", null, true, "13");
   public static final Field WINDOWS_PASSWORD = new WindowsPasswordField("windows_password", "Windows Password", null, true, "14");
 
-  public static final Map<String, Field> FIELDS = new LinkedHashMap<>();
+  public static final Map<String, Field> CLUSTER_PROFILE_FIELDS = new LinkedHashMap<>();
 
   static {
-    FIELDS.put(GO_SERVER_URL.key(), GO_SERVER_URL);
-    FIELDS.put(AUTOREGISTER_TIMEOUT.key(), AUTOREGISTER_TIMEOUT);
-    FIELDS.put(IDLE_TIMEOUT.key(), IDLE_TIMEOUT);
+    CLUSTER_PROFILE_FIELDS.put(GO_SERVER_URL.key(), GO_SERVER_URL);
+    CLUSTER_PROFILE_FIELDS.put(AUTOREGISTER_TIMEOUT.key(), AUTOREGISTER_TIMEOUT);
+    CLUSTER_PROFILE_FIELDS.put(IDLE_TIMEOUT.key(), IDLE_TIMEOUT);
 
-    FIELDS.put(LINUX_USER_NAME.key(), LINUX_USER_NAME);
-    FIELDS.put(SSH_KEY.key(), SSH_KEY);
+    CLUSTER_PROFILE_FIELDS.put(LINUX_USER_NAME.key(), LINUX_USER_NAME);
+    CLUSTER_PROFILE_FIELDS.put(SSH_KEY.key(), SSH_KEY);
 
-    FIELDS.put(WINDOWS_USER_NAME.key(), WINDOWS_USER_NAME);
-    FIELDS.put(WINDOWS_PASSWORD.key(), WINDOWS_PASSWORD);
+    CLUSTER_PROFILE_FIELDS.put(WINDOWS_USER_NAME.key(), WINDOWS_USER_NAME);
+    CLUSTER_PROFILE_FIELDS.put(WINDOWS_PASSWORD.key(), WINDOWS_PASSWORD);
 
-    FIELDS.put(DOMAIN.key(), DOMAIN);
-    FIELDS.put(CLIENT_ID.key(), CLIENT_ID);
-    FIELDS.put(SECRET.key(), SECRET);
-    FIELDS.put(RESOURCE_GROUP.key(), RESOURCE_GROUP);
-    FIELDS.put(REGION_NAME.key(), REGION_NAME);
-    FIELDS.put(NETWORK_ID.key(), NETWORK_ID);
-    FIELDS.put(SUBNET_NAMES.key(), SUBNET_NAMES);
-    FIELDS.put(NETWORK_SECURITY_GROUP_ID.key(), NETWORK_SECURITY_GROUP_ID);
+    CLUSTER_PROFILE_FIELDS.put(DOMAIN.key(), DOMAIN);
+    CLUSTER_PROFILE_FIELDS.put(CLIENT_ID.key(), CLIENT_ID);
+    CLUSTER_PROFILE_FIELDS.put(SECRET.key(), SECRET);
+    CLUSTER_PROFILE_FIELDS.put(RESOURCE_GROUP.key(), RESOURCE_GROUP);
+    CLUSTER_PROFILE_FIELDS.put(REGION_NAME.key(), REGION_NAME);
+    CLUSTER_PROFILE_FIELDS.put(NETWORK_ID.key(), NETWORK_ID);
+    CLUSTER_PROFILE_FIELDS.put(SUBNET_NAMES.key(), SUBNET_NAMES);
+    CLUSTER_PROFILE_FIELDS.put(NETWORK_SECURITY_GROUP_ID.key(), NETWORK_SECURITY_GROUP_ID);
   }
 
   public GoPluginApiResponse execute() {
-    return new DefaultGoPluginApiResponse(200, GSON.toJson(FIELDS));
+    return new DefaultGoPluginApiResponse(200, GSON.toJson(CLUSTER_PROFILE_FIELDS));
   }
 
 }

@@ -26,7 +26,7 @@ import java.util.Map;
 
 import static com.thoughtworks.gocd.elasticagent.azure.AzurePlugin.LOG;
 import static com.thoughtworks.gocd.elasticagent.azure.Errors.AZURE_INVALID_NSG_ID;
-import static com.thoughtworks.gocd.elasticagent.azure.executors.GetPluginConfigurationExecutor.*;
+import static com.thoughtworks.gocd.elasticagent.azure.executors.GetClusterProfileMetadataExecutor.*;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class AzureNetworkSettingsValidation implements Validation {

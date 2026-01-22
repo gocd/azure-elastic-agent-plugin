@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.thoughtworks.gocd.elasticagent.azure.executors;
 
 import com.google.gson.JsonObject;
@@ -27,11 +26,11 @@ import com.thoughtworks.gocd.elasticagent.azure.models.AgentStatusReport;
 import com.thoughtworks.gocd.elasticagent.azure.models.JobIdentifier;
 import com.thoughtworks.gocd.elasticagent.azure.requests.AgentStatusReportRequest;
 import com.thoughtworks.gocd.elasticagent.azure.utils.TemplateReader;
+import java.util.HashMap;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.HashMap;
-
 public class AgentStatusReportExecutor {
+
   private static final Logger LOG = Logger.getLoggerFor(AgentStatusReportExecutor.class);
   private final AgentStatusReportRequest request;
   private final PluginRequest pluginRequest;
@@ -39,9 +38,9 @@ public class AgentStatusReportExecutor {
   private final TemplateReader templateReader;
 
   public AgentStatusReportExecutor(AgentStatusReportRequest request,
-                                   PluginRequest pluginRequest,
-                                   AzureAgentInstances agentInstances,
-                                   TemplateReader templateReader) {
+    PluginRequest pluginRequest,
+    AzureAgentInstances agentInstances,
+    TemplateReader templateReader) {
     this.request = request;
     this.pluginRequest = pluginRequest;
     this.agentInstances = agentInstances;
@@ -55,7 +54,7 @@ public class AgentStatusReportExecutor {
     try {
       AzureInstance agentInstance = getAgentInstance(elasticAgentId, jobIdentifier);
       if (agentInstance != null) {
-        AgentStatusReport agentStatusReport = agentInstances.getAgentStatusReport(pluginRequest.getPluginSettings(), agentInstance);
+        AgentStatusReport agentStatusReport = agentInstances.getAgentStatusReport(request.getClusterProfile(), agentInstance);
         final String statusReportView = templateReader.read("agent-status-report.template.ftlh", agentStatusReport);
         return constructResponseForReport(statusReportView);
       }

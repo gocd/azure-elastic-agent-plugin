@@ -24,7 +24,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.Map;
 
-import static com.thoughtworks.gocd.elasticagent.azure.executors.GetProfileMetadataExecutor.*;
+import static com.thoughtworks.gocd.elasticagent.azure.executors.GetElasticAgentProfileMetadataExecutor.*;
 
 public class ImageValidation implements Validation {
   public static final String IMAGE_URN_OR_CUSTOM_IMAGE_SET_MESSAGE = "Image URN or Custom image id must be set.";

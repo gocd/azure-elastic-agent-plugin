@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.thoughtworks.gocd.elasticagent.azure.executors;
 
 import com.thoughtworks.go.plugin.api.response.DefaultGoPluginApiResponse;
@@ -30,6 +29,7 @@ import com.thoughtworks.gocd.elasticagent.azure.requests.RequestFingerprintCache
 import com.thoughtworks.gocd.elasticagent.azure.service.ServerHealthMessagingService;
 
 public class CreateAgentRequestExecutor implements RequestExecutor {
+
   private final AzureAgentInstances agentInstances;
   private final PluginRequest pluginRequest;
   private RequestFingerprintCache requestFingerprintCache;
@@ -37,9 +37,9 @@ public class CreateAgentRequestExecutor implements RequestExecutor {
   private ServerHealthMessagingService serverHealthMessagingService;
 
   public CreateAgentRequestExecutor(CreateAgentRequest request,
-                                    AzureAgentInstances agentInstances,
-                                    PluginRequest pluginRequest,
-                                    RequestFingerprintCache requestFingerprintCache, ServerHealthMessagingService serverHealthMessagingService) {
+    AzureAgentInstances agentInstances,
+    PluginRequest pluginRequest,
+    RequestFingerprintCache requestFingerprintCache, ServerHealthMessagingService serverHealthMessagingService) {
     this.request = request;
     this.agentInstances = agentInstances;
     this.pluginRequest = pluginRequest;
@@ -50,15 +50,15 @@ public class CreateAgentRequestExecutor implements RequestExecutor {
   @Override
   public GoPluginApiResponse execute() throws Exception {
     String requestFingerprint = request.jobIdentifier().hash();
-    PluginSettings pluginSettings = pluginRequest.getPluginSettings();
+    PluginSettings pluginSettings = request.getClusterProfileProperties();
     ServerInfo serverInfo = pluginRequest.getServerInfo();
     try {
       requestFingerprintCache.getOrExecute(requestFingerprint,
-          pluginSettings.getAutoRegisterPeriod(),
-          () -> {
-            agentInstances.create(request, pluginSettings, serverInfo);
-            serverHealthMessagingService.clearHealthMessage(request.jobIdentifier().getJobRepresentation());
-          });
+        pluginSettings.getAutoRegisterPeriod(),
+        () -> {
+          agentInstances.create(request, pluginSettings, serverInfo);
+          serverHealthMessagingService.clearHealthMessage(request.jobIdentifier().getJobRepresentation());
+        });
     } catch (ProvisionFailedException e) {
       serverHealthMessagingService.sendHealthMessage(e.jobRepresentation(), PluginHealthMessage.error(e.getMessage()));
       return DefaultGoPluginApiResponse.error(e.getMessage());

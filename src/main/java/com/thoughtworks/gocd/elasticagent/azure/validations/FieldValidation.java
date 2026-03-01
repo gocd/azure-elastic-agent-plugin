@@ -18,7 +18,7 @@ package com.thoughtworks.gocd.elasticagent.azure.validations;
 
 import com.thoughtworks.gocd.elasticagent.azure.PluginSettings;
 import com.thoughtworks.gocd.elasticagent.azure.client.GoCDAzureClient;
-import com.thoughtworks.gocd.elasticagent.azure.executors.GetPluginConfigurationExecutor;
+import com.thoughtworks.gocd.elasticagent.azure.executors.GetClusterProfileMetadataExecutor;
 import com.thoughtworks.gocd.elasticagent.azure.models.Field;
 
 import java.util.HashMap;
@@ -28,7 +28,7 @@ public class FieldValidation implements Validation {
   @Override
   public Map<String, String> run(Map<String, String> properties, PluginSettings settings, GoCDAzureClient client) {
     Map<String, String> errors = new HashMap<>();
-    for (Map.Entry<String, Field> entry : GetPluginConfigurationExecutor.FIELDS.entrySet()) {
+    for (Map.Entry<String, Field> entry : GetClusterProfileMetadataExecutor.CLUSTER_PROFILE_FIELDS.entrySet()) {
       Field field = entry.getValue();
       errors.putAll(field.validate(properties.get(entry.getKey())));
     }

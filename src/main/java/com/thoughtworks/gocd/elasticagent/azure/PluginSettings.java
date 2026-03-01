@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.thoughtworks.gocd.elasticagent.azure;
 
 import com.google.gson.FieldNamingPolicy;
@@ -23,20 +22,19 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.microsoft.azure.management.resources.fluentcore.arm.Region;
 import com.thoughtworks.gocd.elasticagent.azure.utils.Util;
+import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Getter;
-import org.joda.time.Period;
-
-import java.util.Objects;
-
 import static org.apache.commons.lang3.StringUtils.isBlank;
+import org.joda.time.Period;
 
 @Getter
 public class PluginSettings {
+
   public static final Gson GSON = new GsonBuilder()
-      .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-      .excludeFieldsWithoutExposeAnnotation()
-      .create();
+    .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+    .excludeFieldsWithoutExposeAnnotation()
+    .create();
 
   @Expose
   @SerializedName("go_server_url")
@@ -100,7 +98,6 @@ public class PluginSettings {
   @SerializedName("windows_password")
   private String windowsPassword;
 
-
   private Period autoRegisterPeriod;
   private Period idleTimeoutPeriod;
 
@@ -112,21 +109,21 @@ public class PluginSettings {
   }
 
   public PluginSettings(String goServerUrl,
-                        String autoRegisterTimeout,
-                        String idleTimeout,
-                        String domain,
-                        String clientId,
-                        String secret,
-                        Period autoRegisterPeriod,
-                        String networkId,
-                        String subnetNames,
-                        String networkSecurityGroupId,
-                        String resourceGroup,
-                        String sshKey,
-                        String regionName,
-                        String linuxUserName,
-                        String windowsUserName,
-                        String windowsPassword) {
+    String autoRegisterTimeout,
+    String idleTimeout,
+    String domain,
+    String clientId,
+    String secret,
+    Period autoRegisterPeriod,
+    String networkId,
+    String subnetNames,
+    String networkSecurityGroupId,
+    String resourceGroup,
+    String sshKey,
+    String regionName,
+    String linuxUserName,
+    String windowsUserName,
+    String windowsPassword) {
     this.goServerUrl = goServerUrl;
     this.autoRegisterTimeout = autoRegisterTimeout;
     this.idleTimeout = idleTimeout;
@@ -145,21 +142,31 @@ public class PluginSettings {
     this.windowsPassword = windowsPassword;
   }
 
-
   public PluginSettings() {
   }
 
   @Override
   public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
+    if (this == o) {
+      return true;
+    }
+    if (o == null || getClass() != o.getClass()) {
+      return false;
+    }
     PluginSettings that = (PluginSettings) o;
 
-    if (goServerUrl != null ? !goServerUrl.equals(that.goServerUrl) : that.goServerUrl != null) return false;
-    if (autoRegisterTimeout != null ? !autoRegisterTimeout.equals(that.autoRegisterTimeout) : that.autoRegisterTimeout != null)
+    if (goServerUrl != null ? !goServerUrl.equals(that.goServerUrl) : that.goServerUrl != null) {
       return false;
-    if (domain != null ? !domain.equals(that.domain) : that.domain != null) return false;
-    if (clientId != null ? !clientId.equals(that.clientId) : that.clientId != null) return false;
+    }
+    if (autoRegisterTimeout != null ? !autoRegisterTimeout.equals(that.autoRegisterTimeout) : that.autoRegisterTimeout != null) {
+      return false;
+    }
+    if (domain != null ? !domain.equals(that.domain) : that.domain != null) {
+      return false;
+    }
+    if (clientId != null ? !clientId.equals(that.clientId) : that.clientId != null) {
+      return false;
+    }
     return secret != null ? secret.equals(that.secret) : that.secret == null;
   }
 

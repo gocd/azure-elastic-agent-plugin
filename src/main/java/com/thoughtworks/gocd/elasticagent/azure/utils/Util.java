@@ -18,7 +18,7 @@ package com.thoughtworks.gocd.elasticagent.azure.utils;
 
 import com.google.common.io.ByteStreams;
 import com.google.common.io.CharStreams;
-import com.thoughtworks.gocd.elasticagent.azure.executors.GetPluginSettingsViewRequestExecutor;
+import com.thoughtworks.gocd.elasticagent.azure.executors.GetClusterProfileViewRequestExecutor;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,7 +36,7 @@ public class Util {
   private static Random random = new Random();
 
   public static String readResource(String resourceFile) {
-    try (InputStreamReader reader = new InputStreamReader(GetPluginSettingsViewRequestExecutor.class.getResourceAsStream(resourceFile), StandardCharsets.UTF_8)) {
+    try (InputStreamReader reader = new InputStreamReader(GetClusterProfileViewRequestExecutor.class.getResourceAsStream(resourceFile), StandardCharsets.UTF_8)) {
       return CharStreams.toString(reader);
     } catch (IOException e) {
       throw new RuntimeException("Could not find resource " + resourceFile, e);
@@ -44,7 +44,7 @@ public class Util {
   }
 
   public static byte[] readResourceBytes(String resourceFile) {
-    try (InputStream in = GetPluginSettingsViewRequestExecutor.class.getResourceAsStream(resourceFile)) {
+    try (InputStream in = GetClusterProfileViewRequestExecutor.class.getResourceAsStream(resourceFile)) {
       return ByteStreams.toByteArray(in);
     } catch (IOException e) {
       throw new RuntimeException("Could not find resource " + resourceFile, e);

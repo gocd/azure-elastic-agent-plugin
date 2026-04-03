@@ -13,31 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.thoughtworks.gocd.elasticagent.azure.vm;
 
 import com.microsoft.azure.management.compute.ImageReference;
 import com.microsoft.azure.management.compute.StorageAccountTypes;
-import com.microsoft.azure.management.compute.VirtualMachineSizeTypes;
 import com.microsoft.azure.management.resources.fluentcore.arm.Region;
 import com.thoughtworks.gocd.elasticagent.azure.AgentConfig;
+import static com.thoughtworks.gocd.elasticagent.azure.Constants.DEFAULT_GO_SERVER_VERSION;
 import com.thoughtworks.gocd.elasticagent.azure.PluginSettings;
 import com.thoughtworks.gocd.elasticagent.azure.models.ElasticProfile;
+import com.thoughtworks.gocd.elasticagent.azure.models.ImageURN;
 import com.thoughtworks.gocd.elasticagent.azure.models.JobIdentifier;
 import com.thoughtworks.gocd.elasticagent.azure.models.Platform;
+import static com.thoughtworks.gocd.elasticagent.azure.models.Platform.LINUX;
 import com.thoughtworks.gocd.elasticagent.azure.models.ServerInfo;
 import com.thoughtworks.gocd.elasticagent.azure.requests.CreateAgentRequest;
-import lombok.Getter;
-import org.apache.commons.lang3.StringUtils;
-
+import static com.thoughtworks.gocd.elasticagent.azure.utils.Util.uniqueString;
+import static com.thoughtworks.gocd.elasticagent.azure.vm.VMTags.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
-
-import static com.thoughtworks.gocd.elasticagent.azure.Constants.DEFAULT_GO_SERVER_VERSION;
-import static com.thoughtworks.gocd.elasticagent.azure.models.Platform.LINUX;
-import static com.thoughtworks.gocd.elasticagent.azure.utils.Util.uniqueString;
-import static com.thoughtworks.gocd.elasticagent.azure.vm.VMTags.*;
+import lombok.Getter;
+import org.apache.commons.lang3.StringUtils;
+import static org.apache.commons.lang3.StringUtils.isBlank;
+import org.joda.time.Period;
 
 @Getter
 public class VmConfig {
@@ -69,26 +68,26 @@ public class VmConfig {
     String imageReferenceString = "";
     if (imageReference != null) {
       imageReferenceString = String.format("{publisher:%s,offer:%s,sku:%s,version:%s}",
-          imageReference.publisher(),
-          imageReference.offer(),
-          imageReference.sku(),
-          imageReference.version());
+        imageReference.publisher(),
+        imageReference.offer(),
+        imageReference.sku(),
+        imageReference.version());
     }
-    return "VmConfig{" +
-        "agentConfig=" + agentConfig +
-        ", region=" + region +
-        ", resourceGroup='" + resourceGroup + '\'' +
-        ", networkId='" + networkId + '\'' +
-        ", UserName='" + userName + '\'' +
-        ", subnet='" + subnet + '\'' +
-        ", name='" + name + '\'' +
-        ", size='" + size + '\'' +
-        ", osDiskStorageAccountType='" + osDiskStorageAccountType + '\'' +
-        ", osDiskSize='" + (osDiskSize.isPresent() ? osDiskSize.get() : "") + '\'' +
-        ", customImageId=" + customImageId +
-        ", imageReference=" + imageReferenceString +
-        ", tags=" + tags +
-        '}';
+    return "VmConfig{"
+      + "agentConfig=" + agentConfig
+      + ", region=" + region
+      + ", resourceGroup='" + resourceGroup + '\''
+      + ", networkId='" + networkId + '\''
+      + ", UserName='" + userName + '\''
+      + ", subnet='" + subnet + '\''
+      + ", name='" + name + '\''
+      + ", size='" + size + '\''
+      + ", osDiskStorageAccountType='" + osDiskStorageAccountType + '\''
+      + ", osDiskSize='" + (osDiskSize.isPresent() ? osDiskSize.get() : "") + '\''
+      + ", customImageId=" + customImageId
+      + ", imageReference=" + imageReferenceString
+      + ", tags=" + tags
+      + '}';
   }
 
   // ToDo: Find server version, check vm name limit, How to specify Custom image id ?
@@ -96,7 +95,7 @@ public class VmConfig {
     this.name = uniqueString(VM_NAME_PREFIX);
     this.environment = builder.environment;
     this.agentConfig = new AgentConfig(builder.goServerUrl, builder.autoregisterKey, builder.serverVersion,
-        this.environment, this.name);
+      this.environment, this.name);
     this.region = builder.region;
     this.resourceGroup = builder.resourceGroup;
     this.networkId = builder.networkId;
@@ -162,49 +161,25 @@ public class VmConfig {
 
       this.environment = Optional.ofNullable(request.environment()).orElse("");
       this.autoregisterKey = request.autoRegisterKey();
-      ElasticProfile elasticProfile = request.elasticProfile();
-      this.subnet = getSubnetName(elasticProfile);
-      this.size = getSize(elasticProfile);
-      this.imageReference = getImageReference(elasticProfile);
-      this.customImageId = getCustomImageId(elasticProfile);
-      this.osDiskStorageAccountType = getOSDiskStorageAccountType(elasticProfile);
-      this.osDiskSize = getOsDiskSize(elasticProfile);
-      this.customScript = getCustomScript(elasticProfile);
-      this.platform = getPlatform(elasticProfile);
+      this.subnet = request.properties().get(ElasticProfile.SUBNET_NAME);
+      this.size = request.properties().get(ElasticProfile.VM_SIZE);
+      this.imageReference = new ImageURN(request.properties().get(ElasticProfile.VM_IMAGE_URN)).toImageReference();
+      this.customImageId = request.properties().get(ElasticProfile.VM_CUSTOM_IMAGE_ID);
+      this.osDiskStorageAccountType
+        = isBlank(request.properties().get(ElasticProfile.OS_DISK_STORAGE_ACCOUNT_TYPE))
+        ? StorageAccountTypes.STANDARD_SSD_LRS
+        : StorageAccountTypes.fromString(request.properties().get(ElasticProfile.OS_DISK_STORAGE_ACCOUNT_TYPE));
+      this.osDiskSize = isBlank(request.properties().get(ElasticProfile.OS_DISK_SIZE)) ? Optional.empty() : Optional.of(Integer.valueOf(request.properties().get(ElasticProfile.OS_DISK_SIZE)));
+      this.customScript = request.properties().get(ElasticProfile.SUBNET_NAME);
+      this.platform = Platform.valueOf(request.properties().get(ElasticProfile.PLATFORM));
       this.jobIdentifier = request.jobIdentifier();
       //overrides
       this.userName = LINUX.equals(platform) ? settings.getLinuxUserName() : settings.getWindowsUserName();
 
-
       tags.put(ENVIRONMENT_TAG_KEY, environment);
-      if (elasticProfile != null) {
-        tags.put(ELASTIC_PROFILE_TAG_KEY, request.elasticProfile().hash());
-      }
-      tags.put(IDLE_TIMEOUT, String.format("%s", getEffectiveIdleTimeoutPeriodInMins(elasticProfile, settings)));
+      tags.put(ELASTIC_PROFILE_TAG_KEY, request.getClusterProfileProperties().hash());
+      tags.put(IDLE_TIMEOUT, String.format("%s", getIdleTimeoutPeriod(request.properties().get(ElasticProfile.IDLE_TIMEOUT))));
       return new VmConfig(this);
-    }
-
-    private String getSubnetName(ElasticProfile elasticProfile) {
-      return Optional.ofNullable(elasticProfile)
-          .flatMap(ElasticProfile::getSubnetName)
-          .orElse(settings.getRandomSubnet());
-    }
-
-    private Optional<Integer> getOsDiskSize(ElasticProfile elasticProfile) {
-      return Optional.ofNullable(elasticProfile)
-          .map(ElasticProfile::getOsDiskSize)
-          .orElse(Optional.empty());
-    }
-
-    private StorageAccountTypes getOSDiskStorageAccountType(ElasticProfile elasticProfile) {
-      return Optional.ofNullable(elasticProfile)
-          .map(ElasticProfile::getOsDiskStorageAccountType)
-          .orElse(StorageAccountTypes.STANDARD_SSD_LRS);
-    }
-
-    public Builder setRequestParams(CreateAgentRequest request) {
-      this.request = request;
-      return this;
     }
 
     public Builder setSettingsParams(PluginSettings settings) {
@@ -218,46 +193,16 @@ public class VmConfig {
       return this;
     }
 
-    private int getEffectiveIdleTimeoutPeriodInMins(ElasticProfile elasticProfile, PluginSettings settings) {
-      return Optional.ofNullable(elasticProfile)
-          .map(ElasticProfile::getIdleTimeoutPeriod)
-          .orElse(settings.getIdleTimeoutPeriod())
-          .getMinutes();
-    }
-
-    private String getCustomImageId(ElasticProfile elasticProfile){
-      return Optional.ofNullable(elasticProfile)
-          .map(ElasticProfile::getVmCustomImageId)
-          .orElse("");
-    }
-
-    private Platform getPlatform(ElasticProfile elasticProfile) {
-      return Optional.ofNullable(elasticProfile)
-          .map(profile -> Optional.ofNullable(profile.getPlatform()).orElse(LINUX))
-          .orElse(LINUX);
-    }
-
-    private String getCustomScript(ElasticProfile elasticProfile) {
-      return Optional.ofNullable(elasticProfile)
-          .map(profile -> StringUtils.defaultIfEmpty(profile.getCustomScript(), "").trim())
-          .orElse("");
-    }
-
-    private String getSize(ElasticProfile elasticProfile) {
-      return Optional.ofNullable(elasticProfile)
-          .map(ElasticProfile::getVmSize)
-          .filter(s -> !s.isEmpty())
-          .orElse(VirtualMachineSizeTypes.STANDARD_D3_V2.toString());
-    }
-
-    private ImageReference getImageReference(ElasticProfile elasticProfile) {
-      try {
-        return Optional.ofNullable(elasticProfile)
-            .map(ElasticProfile::getImageReference)
-            .orElse(null);
-      } catch (IllegalArgumentException e) {
-        return null;
+    public Period getIdleTimeoutPeriod(String idleTimeout) {
+      if (StringUtils.isNotBlank(idleTimeout)) {
+        return new Period().withMinutes(Integer.parseInt(idleTimeout));
       }
+      return null;
+    }
+
+    public Builder setRequestParams(CreateAgentRequest request) {
+      this.request = request;
+      return this;
     }
   }
 }

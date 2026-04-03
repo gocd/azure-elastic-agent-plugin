@@ -30,7 +30,7 @@ import java.util.Map;
 
 import static com.thoughtworks.gocd.elasticagent.azure.AzurePlugin.LOG;
 import static com.thoughtworks.gocd.elasticagent.azure.Errors.AZURE_AUTHENTICATION_ERROR;
-import static com.thoughtworks.gocd.elasticagent.azure.executors.GetPluginConfigurationExecutor.*;
+import static com.thoughtworks.gocd.elasticagent.azure.executors.GetClusterProfileMetadataExecutor.*;
 
 public class ValidateConfigurationExecutor implements RequestExecutor {
 

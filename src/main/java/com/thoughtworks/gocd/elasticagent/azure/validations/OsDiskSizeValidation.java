@@ -25,8 +25,8 @@ import org.apache.commons.lang3.StringUtils;
 import java.util.Collections;
 import java.util.Map;
 
-import static com.thoughtworks.gocd.elasticagent.azure.executors.GetProfileMetadataExecutor.OS_DISK_SIZE;
-import static com.thoughtworks.gocd.elasticagent.azure.executors.GetProfileMetadataExecutor.PLATFORM;
+import static com.thoughtworks.gocd.elasticagent.azure.executors.GetElasticAgentProfileMetadataExecutor.OS_DISK_SIZE;
+import static com.thoughtworks.gocd.elasticagent.azure.executors.GetElasticAgentProfileMetadataExecutor.PLATFORM;
 
 public class OsDiskSizeValidation implements Validation {
   @Override

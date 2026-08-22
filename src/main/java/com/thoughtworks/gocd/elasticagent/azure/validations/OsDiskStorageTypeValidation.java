@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static com.thoughtworks.gocd.elasticagent.azure.executors.GetProfileMetadataExecutor.OS_DISK_STORAGE_ACCOUNT_TYPE;
+import static com.thoughtworks.gocd.elasticagent.azure.executors.GetElasticAgentProfileMetadataExecutor.OS_DISK_STORAGE_ACCOUNT_TYPE;
 
 public class OsDiskStorageTypeValidation implements Validation {
   @Override

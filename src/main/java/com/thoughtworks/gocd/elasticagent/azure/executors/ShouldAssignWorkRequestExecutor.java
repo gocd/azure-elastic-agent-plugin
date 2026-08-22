@@ -13,22 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.thoughtworks.gocd.elasticagent.azure.executors;
 
 import com.thoughtworks.go.plugin.api.response.DefaultGoPluginApiResponse;
 import com.thoughtworks.go.plugin.api.response.GoPluginApiResponse;
 import com.thoughtworks.gocd.elasticagent.azure.AgentInstances;
 import com.thoughtworks.gocd.elasticagent.azure.AzureInstance;
+import static com.thoughtworks.gocd.elasticagent.azure.AzurePlugin.LOG;
 import com.thoughtworks.gocd.elasticagent.azure.PluginSettings;
 import com.thoughtworks.gocd.elasticagent.azure.RequestExecutor;
 import com.thoughtworks.gocd.elasticagent.azure.requests.ShouldAssignWorkRequest;
 import com.thoughtworks.gocd.elasticagent.azure.service.ServerHealthMessagingService;
-
-import static com.thoughtworks.gocd.elasticagent.azure.AzurePlugin.LOG;
 import static com.thoughtworks.gocd.elasticagent.azure.vm.VMTags.JOB_IDENTIFIER_TAG_KEY;
 
 public class ShouldAssignWorkRequestExecutor implements RequestExecutor {
+
   private final AgentInstances<AzureInstance> agentInstances;
   private PluginSettings pluginSettings;
   private ServerHealthMessagingService serverHealthMessagingService;
@@ -50,7 +49,7 @@ public class ShouldAssignWorkRequestExecutor implements RequestExecutor {
         return DefaultGoPluginApiResponse.success("false");
       }
 
-      if (instance.canBeAssigned(request.elasticProfile())) {
+      if (instance.canBeAssigned(request.getClusterProfileProperties())) {
         agentInstances.addTag(pluginSettings, instance.getName(), JOB_IDENTIFIER_TAG_KEY, request.jobIdentifier().hash());
         serverHealthMessagingService.clearHealthMessage(request.jobIdentifier().getJobRepresentation());
         return DefaultGoPluginApiResponse.success("true");

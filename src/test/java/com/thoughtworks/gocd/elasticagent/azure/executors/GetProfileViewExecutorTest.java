@@ -31,7 +31,7 @@ import static org.hamcrest.Matchers.is;
 class GetProfileViewExecutorTest {
   @Test
   void shouldRenderTheTemplateInJSON() throws Exception {
-    GoPluginApiResponse response = new GetProfileViewExecutor().execute();
+    GoPluginApiResponse response = new GetElasticAgentProfileViewExecutor().execute();
     assertThat(response.responseCode(), is(200));
     Map<String, String> hashSet = new Gson().fromJson(response.responseBody(), new TypeToken<Map<String, String>>() {
     }.getType());

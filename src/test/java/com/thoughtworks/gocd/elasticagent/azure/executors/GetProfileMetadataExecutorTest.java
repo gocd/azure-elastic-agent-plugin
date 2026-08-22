@@ -32,15 +32,15 @@ class GetProfileMetadataExecutorTest {
 
   @Test
   void shouldSerializeAllFields() throws Exception {
-    GoPluginApiResponse response = new GetProfileMetadataExecutor().execute();
+    GoPluginApiResponse response = new GetElasticAgentProfileMetadataExecutor().execute();
     List<Metadata> list = new Gson().fromJson(response.responseBody(), new TypeToken<List<Metadata>>() {
     }.getType());
-    assertEquals(list.size(), GetProfileMetadataExecutor.FIELDS.size());
+    assertEquals(list.size(), GetElasticAgentProfileMetadataExecutor.FIELDS.size());
   }
 
   @Test
   void assertJsonStructure() throws Exception {
-    GoPluginApiResponse response = new GetProfileMetadataExecutor().execute();
+    GoPluginApiResponse response = new GetElasticAgentProfileMetadataExecutor().execute();
 
     assertThat(response.responseCode(), is(200));
     String expectedJSON = "[\n" +

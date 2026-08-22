@@ -34,7 +34,7 @@ class GetPluginSettingsViewRequestExecutorTest {
 
   @Test
   void shouldRenderTheTemplateInJSON() throws Exception {
-    GoPluginApiResponse response = new GetPluginSettingsViewRequestExecutor().execute();
+    GoPluginApiResponse response = new GetClusterProfileViewRequestExecutor().execute();
     assertThat(response.responseCode(), is(200));
     Map<String, String> hashSet = new Gson().fromJson(response.responseBody(), new TypeToken<Map<String, String>>() {
     }.getType());
@@ -45,7 +45,7 @@ class GetPluginSettingsViewRequestExecutorTest {
   void allFieldsShouldBePresentInView() throws Exception {
     String template = Util.readResource("/plugin-settings.template.html");
 
-    for (Map.Entry<String, Field> fieldEntry : GetPluginConfigurationExecutor.FIELDS.entrySet()) {
+    for (Map.Entry<String, Field> fieldEntry : GetClusterProfileMetadataExecutor.CLUSTER_PROFILE_FIELDS.entrySet()) {
       assertThat(template, containsString("ng-model=\"" + fieldEntry.getKey() + "\""));
       assertThat(template, containsString("<span class=\"form_error\" ng-class=\"{'is-visible': GOINPUTNAME[" +
           fieldEntry.getKey() + "].$error.server}\" ng-show=\"GOINPUTNAME[" + fieldEntry.getKey() +

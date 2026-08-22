@@ -29,7 +29,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.thoughtworks.gocd.elasticagent.azure.executors.GetProfileMetadataExecutor.VM_IMAGE_URN;
+import static com.thoughtworks.gocd.elasticagent.azure.executors.GetElasticAgentProfileMetadataExecutor.VM_IMAGE_URN;
 import static com.thoughtworks.gocd.elasticagent.azure.models.ImageMetadata.IMAGE_URN_INVALID_GENERIC_MESSAGE;
 import static com.thoughtworks.gocd.elasticagent.azure.models.Platform.LINUX;
 import static org.junit.jupiter.api.Assertions.assertEquals;

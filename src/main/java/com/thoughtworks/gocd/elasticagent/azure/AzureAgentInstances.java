@@ -13,17 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.thoughtworks.gocd.elasticagent.azure;
 
+import static com.thoughtworks.gocd.elasticagent.azure.AzurePlugin.LOG;
 import com.thoughtworks.gocd.elasticagent.azure.client.GoCDAzureClient;
 import com.thoughtworks.gocd.elasticagent.azure.client.GoCDAzureClientFactory;
 import com.thoughtworks.gocd.elasticagent.azure.models.*;
 import com.thoughtworks.gocd.elasticagent.azure.requests.CreateAgentRequest;
 import com.thoughtworks.gocd.elasticagent.azure.utils.Util;
-import org.joda.time.DateTime;
-import org.joda.time.Period;
-
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -31,8 +28,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
-
-import static com.thoughtworks.gocd.elasticagent.azure.AzurePlugin.LOG;
+import org.joda.time.DateTime;
+import org.joda.time.Period;
 
 public class AzureAgentInstances implements AgentInstances<AzureInstance> {
 
@@ -62,7 +59,7 @@ public class AzureAgentInstances implements AgentInstances<AzureInstance> {
       LOG.info(MessageFormat.format("Task is already scheduled on instance {0}.", instance.getName()));
       return instance;
     }
-    AzureInstance instanceByElasticProfile = findAvailableInstance(request.elasticProfile());
+    AzureInstance instanceByElasticProfile = findAvailableInstance(request.getClusterProfileProperties());
     if (instanceByElasticProfile != null) {
       LOG.info(MessageFormat.format("Instance {0} provisioned already with the same elastic profile.", instanceByElasticProfile.getName()));
       return instanceByElasticProfile;
@@ -88,10 +85,10 @@ public class AzureAgentInstances implements AgentInstances<AzureInstance> {
     LOG.info("Adding Tag {} to Agent {} with value {}", tagName, agentId, tagValue);
     GoCDAzureClient goCDAzureClient = clientFactory.initialize(settings);
     Optional.ofNullable(instances.get(agentId))
-        .ifPresent(instance -> {
-          AzureInstance instanceWithTags = azureInstanceManager.addTag(goCDAzureClient, instance, tagName, tagValue);
-          register(instanceWithTags);
-        });
+      .ifPresent(instance -> {
+        AzureInstance instanceWithTags = azureInstanceManager.addTag(goCDAzureClient, instance, tagName, tagValue);
+        register(instanceWithTags);
+      });
     return instances.get(agentId);
   }
 
@@ -100,10 +97,10 @@ public class AzureAgentInstances implements AgentInstances<AzureInstance> {
     LOG.info("Removing Tag {} on Agent {}", tagName, agentId);
     GoCDAzureClient goCDAzureClient = clientFactory.initialize(settings);
     Optional.ofNullable(instances.get(agentId))
-        .ifPresent(instance -> {
-          AzureInstance instanceWithoutTag = azureInstanceManager.removeTag(goCDAzureClient, instance, tagName);
-          register(instanceWithoutTag);
-        });
+      .ifPresent(instance -> {
+        AzureInstance instanceWithoutTag = azureInstanceManager.removeTag(goCDAzureClient, instance, tagName);
+        register(instanceWithoutTag);
+      });
   }
 
   @Override
@@ -111,8 +108,8 @@ public class AzureAgentInstances implements AgentInstances<AzureInstance> {
     List<AzureInstance> instancesToTerminate = unregisteredAfterTimeout(settings.getAutoRegisterPeriod(), agents);
     if (!instancesToTerminate.isEmpty()) {
       String instanceNames = String.join(",", instancesToTerminate.stream()
-          .map(AzureInstance::getName)
-          .collect(Collectors.toCollection(ArrayList::new)));
+        .map(AzureInstance::getName)
+        .collect(Collectors.toCollection(ArrayList::new)));
       LOG.warn("Terminating instances that did not register " + instanceNames);
       for (AzureInstance instance : instancesToTerminate) {
         terminate(instance.getName(), settings);
@@ -139,10 +136,10 @@ public class AzureAgentInstances implements AgentInstances<AzureInstance> {
   }
 
   @Override
-  public void refreshAll(PluginRequest pluginRequest) throws Exception {
-    GoCDAzureClient goCDAzureClient = clientFactory.initialize(pluginRequest.getPluginSettings());
+  public void refreshAll(ClusterProfileProperties clusterProfileProperties) throws Exception {
+    GoCDAzureClient goCDAzureClient = clientFactory.initialize(clusterProfileProperties);
     if (!refreshed) {
-      List<AzureInstance> instances = azureInstanceManager.listInstances(goCDAzureClient, pluginRequest.getServerInfo().getServerId());
+      List<AzureInstance> instances = azureInstanceManager.listInstances(goCDAzureClient, clusterProfileProperties.getResourceGroup());
       instances.forEach(instance -> register(instance));
       refreshed = true;
     }
@@ -166,7 +163,7 @@ public class AzureAgentInstances implements AgentInstances<AzureInstance> {
     return instances.values().stream().filter((instance) -> instance.jobIdentifierMatches(jobIdentifier)).findFirst().orElse(null);
   }
 
-  public AzureInstance findAvailableInstance(ElasticProfile elasticProfile) {
+  public AzureInstance findAvailableInstance(ClusterProfileProperties elasticProfile) {
     return instances.values().stream().filter((instance) -> instance.canBeAssigned(elasticProfile)).findFirst().orElse(null);
   }
 

@@ -13,21 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.thoughtworks.gocd.elasticagent.azure.models;
 
 import com.google.gson.annotations.SerializedName;
 import com.microsoft.azure.management.compute.ImageReference;
 import com.microsoft.azure.management.compute.StorageAccountTypes;
+import java.util.Map;
+import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.Period;
-
-import java.util.Optional;
-
 import static org.apache.commons.lang3.StringUtils.isBlank;
+import org.joda.time.Period;
 
 @Getter
 @EqualsAndHashCode
@@ -71,15 +69,16 @@ public class ElasticProfile {
   @SerializedName(SUBNET_NAME)
   private String subnetName;
 
-  public ElasticProfile() { }
+  public ElasticProfile() {
+  }
 
   public ElasticProfile(String vmSize,
-                        String vmImageURN,
-                        String customImageId,
-                        String customScript,
-                        Platform platform,
-                        String osDiskStorageAccountType,
-                        String idleTimeout, String osDiskSize, String subnet) {
+    String vmImageURN,
+    String customImageId,
+    String customScript,
+    Platform platform,
+    String osDiskStorageAccountType,
+    String idleTimeout, String osDiskSize, String subnet) {
     this.vmSize = vmSize;
     this.vmImageURN = vmImageURN;
     this.vmCustomImageId = customImageId;
@@ -89,6 +88,10 @@ public class ElasticProfile {
     this.idleTimeout = idleTimeout;
     this.osDiskSize = osDiskSize;
     this.subnetName = subnet;
+  }
+
+  public ElasticProfile(Map<String, String> properties) {
+    throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
   }
 
   public ImageReference getImageReference() {
@@ -103,7 +106,7 @@ public class ElasticProfile {
     return isBlank(osDiskStorageAccountType) ? StorageAccountTypes.STANDARD_SSD_LRS : StorageAccountTypes.fromString(osDiskStorageAccountType);
   }
 
-  public Period getIdleTimeoutPeriod(){
+  public Period getIdleTimeoutPeriod() {
     if (StringUtils.isNotBlank(this.idleTimeout)) {
       return new Period().withMinutes(Integer.parseInt(this.idleTimeout));
     }
@@ -116,5 +119,13 @@ public class ElasticProfile {
 
   public Optional<String> getSubnetName() {
     return isBlank(subnetName) ? Optional.empty() : Optional.of(subnetName);
+  }
+
+  public String getIdleTimeout() {
+    return idleTimeout;
+  }
+
+  public Platform getPlatform() {
+    return platform;
   }
 }

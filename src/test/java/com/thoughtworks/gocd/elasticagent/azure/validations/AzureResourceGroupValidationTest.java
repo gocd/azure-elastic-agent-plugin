@@ -25,7 +25,7 @@ import java.util.Collections;
 import java.util.Map;
 
 import static com.thoughtworks.gocd.elasticagent.azure.Errors.AZURE_INVALID_RESOURCE_GROUP;
-import static com.thoughtworks.gocd.elasticagent.azure.executors.GetPluginConfigurationExecutor.RESOURCE_GROUP;
+import static com.thoughtworks.gocd.elasticagent.azure.executors.GetClusterProfileMetadataExecutor.RESOURCE_GROUP;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;

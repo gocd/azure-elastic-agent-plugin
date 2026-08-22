@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.thoughtworks.gocd.elasticagent.azure;
 
 import com.thoughtworks.go.plugin.api.GoApplicationAccessor;
@@ -25,6 +24,12 @@ import com.thoughtworks.go.plugin.api.logging.Logger;
 import com.thoughtworks.go.plugin.api.request.GoPluginApiRequest;
 import com.thoughtworks.go.plugin.api.response.DefaultGoPluginApiResponse;
 import com.thoughtworks.go.plugin.api.response.GoPluginApiResponse;
+import static com.thoughtworks.gocd.elasticagent.azure.Request.REQUEST_AGENT_STATUS_REPORT;
+import static com.thoughtworks.gocd.elasticagent.azure.Request.REQUEST_CAPABILITIES;
+import static com.thoughtworks.gocd.elasticagent.azure.Request.REQUEST_GET_CLUSTER_PROFILE_METADATA;
+import static com.thoughtworks.gocd.elasticagent.azure.Request.REQUEST_GET_ELASTIC_AGENT_PROFILE_METADATA;
+import static com.thoughtworks.gocd.elasticagent.azure.Request.REQUEST_GET_ELASTIC_AGENT_PROFILE_VIEW;
+import static com.thoughtworks.gocd.elasticagent.azure.Request.REQUEST_JOB_COMPLETION;
 import com.thoughtworks.gocd.elasticagent.azure.client.GoCDAzureClientFactory;
 import com.thoughtworks.gocd.elasticagent.azure.exceptions.PluginSettingsNotConfiguredException;
 import com.thoughtworks.gocd.elasticagent.azure.executors.*;
@@ -55,41 +60,64 @@ public class AzurePlugin implements GoPlugin {
 
   @Override
   public GoPluginApiResponse handle(GoPluginApiRequest request) throws UnhandledRequestTypeException {
+    ClusterProfileProperties clusterProfileProperties;
     try {
       switch (Request.fromString(request.requestName())) {
+        case REQUEST_GET_ICON:
+          return new GetPluginIconExecutor()
+            .execute();
         case REQUEST_SHOULD_ASSIGN_WORK:
-          refreshInstances();
-          return ShouldAssignWorkRequest.fromJSON(request.requestBody()).executor(agentInstances, pluginRequest.getPluginSettings(), serverHealthMessagingService).execute();
+          ShouldAssignWorkRequest shouldAssignWorkRequest = ShouldAssignWorkRequest.fromJSON(request.requestBody());
+          clusterProfileProperties = shouldAssignWorkRequest.getClusterProfileProperties();
+          refreshInstances(clusterProfileProperties);
+          return ShouldAssignWorkRequest.fromJSON(request.requestBody())
+            .executor(agentInstances, clusterProfileProperties, serverHealthMessagingService)
+            .execute();
         case REQUEST_CREATE_AGENT:
-          refreshInstances();
-          return CreateAgentRequest.fromJSON(request.requestBody()).executor(agentInstances, pluginRequest, requestFingerprintCache, serverHealthMessagingService).execute();
+          CreateAgentRequest createAgentRequest = CreateAgentRequest.fromJSON(request.requestBody());
+          refreshInstances(createAgentRequest.getClusterProfileProperties());
+          return createAgentRequest
+            .executor(agentInstances, pluginRequest, requestFingerprintCache, serverHealthMessagingService)
+            .execute();
         case REQUEST_SERVER_PING:
-          refreshInstances();
-          return new ServerPingRequestExecutor(agentInstances, pluginRequest, serverHealthMessagingService).execute();
-        case PLUGIN_SETTINGS_GET_VIEW:
-          return new GetPluginSettingsViewRequestExecutor().execute();
-        case REQUEST_GET_PROFILE_METADATA:
-          return new GetProfileMetadataExecutor().execute();
-        case REQUEST_GET_PROFILE_VIEW:
-          return new GetProfileViewExecutor().execute();
-        case REQUEST_VALIDATE_PROFILE:
-          return ProfileValidateRequest.fromJSON(request.requestBody()).executor(pluginRequest, clientFactory).execute();
-        case PLUGIN_SETTINGS_GET_ICON:
-          return new GetPluginSettingsIconExecutor().execute();
-        case PLUGIN_SETTINGS_GET_CONFIGURATION:
-          return new GetPluginConfigurationExecutor().execute();
-        case PLUGIN_SETTINGS_VALIDATE_CONFIGURATION:
-          return ValidatePluginSettings.fromJSON(request.requestBody()).executor(clientFactory).execute();
-        case REQUEST_STATUS_REPORT:
-          return new StatusReportExecutor(pluginRequest, agentInstances,TemplateReader.instance()).execute();
-        case REQUEST_AGENT_STATUS_REPORT:
-          refreshInstances();
-          return AgentStatusReportRequest.fromJSON(request.requestBody()).executor(pluginRequest, agentInstances, TemplateReader.instance()).execute();
-        case REQUEST_CAPABILITIES:
-          return new GetCapabilitiesExecutor().execute();
+          ServerPingRequest serverPingRequest = ServerPingRequest.fromJSON(request.requestBody());
+          serverPingRequest.allClusterProfileProperties().forEach(x -> {
+            try {
+              refreshInstances(x);
+            } catch (Exception ex) {
+              LOG.error(null, ex);
+            }
+          });
+          return new ServerPingRequestExecutor(ServerPingRequest.fromJSON(request.requestBody()), agentInstances, pluginRequest, serverHealthMessagingService)
+            .execute();
+        case REQUEST_GET_ELASTIC_AGENT_PROFILE_METADATA:
+          return new GetElasticAgentProfileMetadataExecutor()
+            .execute();
+        case REQUEST_GET_ELASTIC_AGENT_PROFILE_VIEW:
+          return new GetElasticAgentProfileViewExecutor()
+            .execute();
         case REQUEST_JOB_COMPLETION:
-          refreshInstances();
-          return JobCompletionRequest.fromJSON(request.requestBody()).executor(agentInstances, pluginRequest).execute();
+          JobCompletionRequest jobCompletionRequest = JobCompletionRequest.fromJSON(request.requestBody());
+          refreshInstances(jobCompletionRequest.getClusterProfileProperties());
+          return jobCompletionRequest
+            .executor(agentInstances, pluginRequest).execute();
+        case REQUEST_CAPABILITIES:
+          return new GetCapabilitiesExecutor()
+            .execute();
+        case REQUEST_AGENT_STATUS_REPORT:
+          AgentStatusReportRequest agentStatusReportRequest = AgentStatusReportRequest.fromJSON(request.requestBody());
+          refreshInstances(agentStatusReportRequest.getClusterProfile());
+          return agentStatusReportRequest
+            .executor(pluginRequest, agentInstances, TemplateReader.instance()).execute();
+        case REQUEST_GET_CLUSTER_PROFILE_METADATA:
+          return new GetClusterProfileMetadataExecutor()
+            .execute();
+        case REQUEST_GET_CLUSTER_PROFILE_VIEW:
+          return new GetClusterProfileViewRequestExecutor()
+            .execute();
+        case REQUEST_VALIDATE_CLUSTER_PROFILE:
+          return ClusterProfileValidateRequest.fromJSON(request.requestBody())
+            .executor(pluginRequest, clientFactory).execute();
         default:
           throw new UnhandledRequestTypeException(request.requestName());
       }
@@ -106,8 +134,8 @@ public class AzurePlugin implements GoPlugin {
     }
   }
 
-  private void refreshInstances() throws Exception {
-    agentInstances.refreshAll(pluginRequest);
+  private void refreshInstances(ClusterProfileProperties clusterProfileProperties) throws Exception {
+    agentInstances.refreshAll(clusterProfileProperties);
   }
 
   @Override

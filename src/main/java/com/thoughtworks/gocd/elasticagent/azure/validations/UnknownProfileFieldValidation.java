@@ -18,7 +18,7 @@ package com.thoughtworks.gocd.elasticagent.azure.validations;
 
 import com.thoughtworks.gocd.elasticagent.azure.PluginSettings;
 import com.thoughtworks.gocd.elasticagent.azure.client.GoCDAzureClient;
-import com.thoughtworks.gocd.elasticagent.azure.executors.GetProfileMetadataExecutor;
+import com.thoughtworks.gocd.elasticagent.azure.executors.GetElasticAgentProfileMetadataExecutor;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -30,7 +30,7 @@ public class UnknownProfileFieldValidation implements Validation {
   public Map<String, String> run(Map<String, String> properties, PluginSettings settings, GoCDAzureClient client) {
     HashMap<String, String> errors = new HashMap<>();
     Set<String> set = new HashSet<>(properties.keySet());
-    set.removeAll(GetProfileMetadataExecutor.FIELDS.stream().map(metadata -> metadata.getKey()).collect(Collectors.toCollection(ArrayList::new)));
+    set.removeAll(GetElasticAgentProfileMetadataExecutor.FIELDS.stream().map(metadata -> metadata.getKey()).collect(Collectors.toCollection(ArrayList::new)));
     set.forEach(s -> errors.put(s, UNKNOWN_PROPERTY_MESSAGE));
     return errors;
   }
